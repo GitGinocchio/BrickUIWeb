@@ -4,7 +4,7 @@
  */
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "brickuiweb",
+  "name": "brickui",
   "compatibility_date": "2025-10-11",
   "main": "server/index.ts",
   "assets": {
