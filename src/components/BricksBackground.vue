@@ -2,6 +2,21 @@
     <canvas ref="canvasRef" class="background"> </canvas>
 </template>
 
+
+<style scoped>
+body {
+    background-color: black;
+}
+.background {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+</style>
+
+
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref } from "vue";
 
@@ -118,16 +133,3 @@ onMounted(() => {
     });
 });
 </script>
-
-<style scoped>
-body {
-    background-color: black;
-}
-.background {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-}
-</style>

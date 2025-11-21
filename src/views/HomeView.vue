@@ -1,12 +1,24 @@
 <template>
-    <Background></Background>
+    <FlickeringBackground 
+        :color="colors.dark.accentForeground" 
+        :square-size="15"
+        :flicker-chance="0.25"
+        :max-opacity="0.5"
+    />
+    <Header />
 </template>
 
 <script setup lang="ts">
-import Background from "@/components/Background.vue";
+import FlickeringBackground from "@/components/FlickeringBackgroung.vue";
+import Header from "@/components/Header.vue";
+import Hero from "@/components/Hero.vue";
+
+import { computed, onMounted } from "vue";
+import { colors } from "@/themes/colors.ts";
+
 </script>
 
-<style scoped>
+<style>
 body {
     background-color: black;
 }
