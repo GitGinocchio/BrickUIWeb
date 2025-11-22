@@ -3,9 +3,10 @@
         :color="colors.dark.accentForeground" 
         :square-size="15"
         :flicker-chance="0.25"
-        :max-opacity="0.5"
+        :max-opacity="0.2"
     />
     <Header />
+    <Hero />
 </template>
 
 <script setup lang="ts">

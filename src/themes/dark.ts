@@ -16,13 +16,25 @@ export const dark: GlobalThemeOverrides = {
     colorSecondary: colors.dark.primaryDark,
     colorSecondaryHover: colors.dark.primary,
     paddingMedium: "0.5rem 1rem 0.5rem 1rem",
+    paddingLarge: "0.5rem 1.75rem 0.5rem 1.75rem",
     borderRadiusMedium: "10px",
+    borderRadiusLarge: "10px",
     heightMedium: "2.5rem",
+    heightLarge: "3rem",
     fontWeight: "500",
+
+    // === tertiary ===
+    colorTertiary: colors.light.background,
+    textColorTertiary: colors.light.tertiary,
+    colorTertiaryHover: colors.light.tertiaryForeground,
+    colorTertiaryPressed: colors.light.tertiaryPressed,
+  
 
     // === Quaternary ===
     colorQuaternaryHover: colors.dark.primaryDark,
     colorQuaternaryPressed: colors.dark.primary,
+    color: colors.dark.foreground,
+    
 
     // === Default ===
     textColor: colors.dark.foreground,

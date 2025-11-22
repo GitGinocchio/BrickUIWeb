@@ -21,6 +21,12 @@ export const colors = {
     border: "#e0e0e0",
     input: "#e6e6e6",
 
+    // Tertiary
+    tertiary: "#ffffff",
+    tertiaryForeground: "#727272",
+    tertiaryPressed: "#525252",
+    focus: "#fff",
+
     // Accent
     accent: "#fce4e8",
     accentForeground: "#cb4153",

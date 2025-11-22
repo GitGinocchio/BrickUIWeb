@@ -1,6 +1,6 @@
 <template>
     <header>
-        <div class="container">
+            <div class="container">
             <div class="brand">
                 <img src="../assets/logo.svg"></img>
                 <div>
@@ -55,11 +55,9 @@ header div, nav {
 
 .container {
     display: flex;
-    justify-content: space-evenly;
-    margin-left: 16rem;
-    margin-right: 16rem;
-    padding-left: 1.5rem;
-    padding-right: 1.5rem;
+    justify-content: space-between;
+    margin-left: 16.25rem;
+    margin-right: 16.25rem;
     height: 100%;
 }
 
