@@ -10,7 +10,7 @@
                     </p>
                 </div>
                 <div class="buttons">
-                    <NButton strong secondary size="large" >
+                    <NButton class="download-nbutton" strong secondary size="large" >
                     <template #icon>
                         <DownloadIcon />
                     </template>
@@ -66,12 +66,16 @@ h1{
     font-size: 1.35rem;
     font-weight: 450;
     color: rgba(255, 255, 255, 0.7);
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
 }
 
 .slogan .buttons{
     display: flex;
     gap: 1rem;
+}
+
+.download-nbutton{
+    --n-color-pressed: #7b2832 !important;
 }
 
 .github-nbutton{

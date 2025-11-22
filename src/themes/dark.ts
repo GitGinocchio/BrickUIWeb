@@ -23,7 +23,7 @@ export const dark: GlobalThemeOverrides = {
     heightLarge: "3rem",
     fontWeight: "500",
 
-    // === tertiary ===
+    // === Tertiary ===
     colorTertiary: colors.light.background,
     textColorTertiary: colors.light.tertiary,
     colorTertiaryHover: colors.light.tertiaryForeground,

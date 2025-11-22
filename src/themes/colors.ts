@@ -24,7 +24,7 @@ export const colors = {
     // Tertiary
     tertiary: "#ffffff",
     tertiaryForeground: "#727272",
-    tertiaryPressed: "#525252",
+    tertiaryPressed: "#757373ff",
     focus: "#fff",
 
     // Accent
