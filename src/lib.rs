@@ -1,5 +1,8 @@
 use worker::*;
 
+pub mod api;
+
+
 #[event(start)]
 fn init() {
     console_error_panic_hook::set_once();
@@ -42,7 +45,12 @@ pub async fn not_found_handler(_req: Request, _ctx: RouteContext<()>) -> Result<
 async fn fetch(req: Request, env: Env, _ctx: Context) -> Result<Response> {
     Router::new()
         .get_async("/", webapp)
-        .get_async("/api", api_handler)
+
+        // Api routes
+        .post_async("/api/auth/register/classic", api::auth::register::classic)
+        .get_async("/api/auth/register/google/start", api::auth::register::google_start)
+        .get_async("/api/auth/register/google/callback", api::auth::register::google_callback)
+
         .on_async("/*path", not_found_handler)
         .run(req, env)
         .await
