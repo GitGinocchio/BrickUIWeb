@@ -7,16 +7,8 @@
     "node": "^20.19.0 || >=22.12.0"
   },
   "scripts": {
-    "dev": "run-p dev:build dev:wrangler",
-    "dev:build": "vite build --watch",
-    "dev:wrangler": "wrangler dev --config ./wrangler.jsonc",
-    "dev:ui": "vite",
-    "build": "run-p type-check \"build-only {@}\" --",
-    "build-only": "vite build",
-    "preview": "npm run build && wrangler dev",
-    "type-check": "vue-tsc --build",
-    "deploy": "npm run build && wrangler deploy",
-    "cf-typegen": "wrangler types"
+    "dev": "vite dev",
+    "build": "vite build"
   },
   "dependencies": {
     "lucide-vue-next": "^0.554.0",

@@ -6,7 +6,11 @@ fn init() {
 }
 
 // Handler API
-pub async fn api_handler(_req: Request, _ctx: RouteContext<()>) -> Result<Response> {
+pub async fn api_handler(_req: Request, ctx: RouteContext<()>) -> Result<Response> {
+    let url = ctx.env.var("SUPABASE_URL")?;
+
+    console_log!("url: {url}");
+
     Response::ok("api route!")
 }
 

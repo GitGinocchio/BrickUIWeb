@@ -1,0 +1,40 @@
+# For more details on how to configure Wrangler, refer to:
+# https://developers.cloudflare.com/workers/wrangler/configuration/
+
+name = "brickui"
+compatibility_date = "2025-10-11"
+main = "./build/worker/shim.mjs"
+
+[build]
+#command = "cargo install -q worker-build && worker-build --config ./wrangler.toml && npm run build-only"
+#cwd = "."
+#watch_dir = "."
+
+[assets]
+directory = "./dist/client"
+not_found_handling = "none"
+binding = "ASSETS"
+# run_worker_first in JSON era un array con pattern, in TOML va come array
+run_worker_first = ["/api/*"]
+
+[observability]
+enabled = true
+
+# Smart Placement
+# Docs: https://developers.cloudflare.com/workers/configuration/smart-placement/#smart-placement
+# [placement]
+# mode = "smart"
+
+# Environment Variables
+# https://developers.cloudflare.com/workers/configuration/#environment-variables
+# [vars]
+# MY_VARIABLE = "production_value"
+
+# Note: Use secrets to store sensitive data.
+# https://developers.cloudflare.com/workers/configuration/secrets/
+
+# Service Bindings (communicate between multiple Workers)
+# https://developers.cloudflare.com/workers/wrangler/configuration/#service-bindings
+# [[services]]
+# binding = "MY_SERVICE"
+# service = "my-service"
