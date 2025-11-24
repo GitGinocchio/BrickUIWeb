@@ -1,5 +1,10 @@
 use worker::*;
 
+#[event(start)]
+fn init() {
+    console_error_panic_hook::set_once();
+}
+
 // Handler API
 pub async fn get(_req: Request, _ctx: RouteContext<()>) -> Result<Response> {
     Response::empty()
@@ -29,21 +34,9 @@ pub async fn webapp(req: Request, ctx: RouteContext<()>) -> Result<Response> {
 
 #[event(fetch)]
 async fn fetch(req: Request, env: Env, _ctx: Context) -> Result<Response> {
-    console_error_panic_hook::set_once();
-
     Router::new()
         .get_async("/api", get)
         .get_async("/*path", webapp)
-            /*
-            match ctx..asset(req).await {
-                Ok(Some(asset)) => Ok(asset),
-                _ => {
-                    // Fallback SPA: return index.html
-                    ctx.asset("index.html").await?
-                        .ok_or_else(|| JsValue::from_str("index.html not found").into())
-                }
-            }
-            */
         .run(req, env)
         .await
 }

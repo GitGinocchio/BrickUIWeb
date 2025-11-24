@@ -6,14 +6,12 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "brickui",
   "compatibility_date": "2025-10-11",
-  //"main": "server/index.ts",
-  "main" : "build/worker/shim.mjs",
+  "main" : "./dist/index.js",
   "build" : {
     "command": "cargo install -q worker-build && worker-build"
   },
   "assets": {
-    "not_found_handling": "single-page-application",
-    "directory": "./public",
+    "not_found_handling": "none",
     "binding": "ASSETS",
   },
   "observability": {
