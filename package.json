@@ -9,7 +9,7 @@
   "scripts": {
     "dev": "run-p dev:build dev:wrangler",
     "dev:build": "vite build --watch",
-    "dev:wrangler": "wrangler dev",
+    "dev:wrangler": "wrangler dev --config ./wrangler.jsonc",
     "dev:ui": "vite",
     "build": "run-p type-check \"build-only {@}\" --",
     "build-only": "vite build",
