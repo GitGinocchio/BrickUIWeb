@@ -53,16 +53,13 @@ pub async fn google_start(mut _req: Request, ctx: RouteContext<()>) -> Result<Re
     let supabase_url = ctx.env.var("SUPABASE_URL")?;
     let redirect_uri = ctx.env.var("GOOGLE_REDIRECT_URI")?;
 
-    let auth_url = Url::from_str(&format!(
-        "{}/auth/v1/authorize?provider=google&redirect_to={}",
-        supabase_url, redirect_uri
-    ))?;
+    let auth_url = Url::from_str(&format!("{supabase_url}/auth/v1/authorize?provider=google&redirect_to={redirect_uri}&response_type=code"))?;
+
+    console_log!("auth_url:{auth_url}");
 
     Response::redirect(auth_url)
 }
 
-pub async fn google_callback(req: Request, _ctx: RouteContext<()>) -> Result<Response> {
-    let url = req.url()?;
-    let query = url.query().unwrap_or(""); // contiene access_token, refresh_token
-    Response::ok(format!("Tokens: {}", query))
+pub async fn google_callback(_req: Request, _ctx: RouteContext<()>) -> Result<Response> {
+    Response::empty()
 }

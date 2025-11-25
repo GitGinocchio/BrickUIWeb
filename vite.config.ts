@@ -19,9 +19,9 @@ function rustWatcher() {
         try {
           execSync(
             'cargo install -q worker-build && worker-build --config ./wrangler.toml',
-            { stdio: 'inherit' }
+            { stdio: "pipe" }
           )
-		  console.log("✅ Build worker rust completata con successo")
+		      console.log("✅ Build worker rust completata con successo")
         } catch (err) {
           console.warn("⚠️ Errore nella build Rust — proseguo con la build precedente")
           console.warn(String(err))

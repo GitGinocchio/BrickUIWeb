@@ -2,11 +2,11 @@
 # https://developers.cloudflare.com/workers/wrangler/configuration/
 
 name = "brickui"
-compatibility_date = "2025-10-11"
-main = "./build/worker/shim.mjs"
+compatibility_date = "2025-11-25"
+main = "./build/index.js"
 
-[build]
-#command = "cargo install -q worker-build && worker-build --config ./wrangler.toml && npm run build-only"
+#[build]
+#command = "cargo install -q worker-build && worker-build --config ./wrangler.toml"
 #cwd = "."
 #watch_dir = "."
 
@@ -14,21 +14,21 @@ main = "./build/worker/shim.mjs"
 directory = "./dist/client"
 not_found_handling = "none"
 binding = "ASSETS"
-# run_worker_first in JSON era un array con pattern, in TOML va come array
-run_worker_first = ["/api/*"]
+run_worker_first = [ "/api/*" ]
 
 [observability]
 enabled = true
 
 # Smart Placement
 # Docs: https://developers.cloudflare.com/workers/configuration/smart-placement/#smart-placement
-# [placement]
-# mode = "smart"
+[placement]
+mode = "smart"
 
 # Environment Variables
 # https://developers.cloudflare.com/workers/configuration/#environment-variables
-# [vars]
-# MY_VARIABLE = "production_value"
+[vars]
+GOOGLE_REDIRECT_URI = "https://brickui.giulioo.workers.dev/api/auth/register/google/callback"
+SUPABASE_URL = "https://gbsgahfgkgjlhtvgwtur.supabase.co"
 
 # Note: Use secrets to store sensitive data.
 # https://developers.cloudflare.com/workers/configuration/secrets/
