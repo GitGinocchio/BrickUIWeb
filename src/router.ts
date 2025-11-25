@@ -7,6 +7,15 @@ const router = createRouter({
       path: "/",
       name: "home",
       component: () => import("./views/HomeView.vue"),
+      beforeEnter: (to, from, next) => {
+        if (to.query.status_code && from.name !== 'error') {
+          return next({
+            name: 'error',
+            query: { status_code: to.query.status_code }
+          })
+        }
+        next()
+      }
     },
     {
       path: "/about",
@@ -18,8 +27,8 @@ const router = createRouter({
     },
     {
       path: "/:pathMatch(.*)*",
-      name: "not-found",
-      component: () => import("./views/NotFound.vue"),
+      name: "error",
+      component: () => import("./views/Error.vue"),
     }
   ],
 });

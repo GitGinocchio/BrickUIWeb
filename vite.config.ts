@@ -19,7 +19,7 @@ function rustWatcher() {
         try {
           execSync(
             'cargo install -q worker-build && worker-build --config ./wrangler.toml',
-            { stdio: "pipe" }
+            { stdio: "inherit" }
           )
 		      console.log("✅ Build worker rust completata con successo")
         } catch (err) {
