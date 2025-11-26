@@ -17,7 +17,7 @@
                     Download on Windows
                     </NButton>
 
-                    <NButton strong class="github-nbutton" tertiary type="primary" size="large" >
+                    <NButton strong class="github-nbutton" tertiary type="primary" size="large" @click="redirectToGithub">
                         <template #icon>
                             <GithubIcon />
                         </template>
@@ -108,5 +108,9 @@ import { NButton } from 'naive-ui';
 
 function redirectToDownload() {
     window.location.href = "/api/download/latest";
+}
+
+function redirectToGithub() {
+    window.location.href = "https://github.com/BrickUIApp";
 }
 </script>
