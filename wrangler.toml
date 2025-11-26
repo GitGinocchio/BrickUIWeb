@@ -4,7 +4,6 @@
 name = "brickui"
 compatibility_date = "2025-11-25"
 main = "./build/index.js"
-preview_urls = false
 
 #[build]
 #command = "cargo install -q worker-build && worker-build --config ./wrangler.toml"
@@ -33,6 +32,15 @@ GITHUB_OWNER = "BrickUIApp"
 GITHUB_REPO = "BrickUIApp"
 
 WORKER_ENV = "production"
+
+[env.local.vars]
+WORKER_ENV = "dev"
+
+GOOGLE_REDIRECT_URI = "https://brickui.giulioo.workers.dev/api/auth/register/google/callback"
+SUPABASE_URL = "https://gbsgahfgkgjlhtvgwtur.supabase.co"
+
+GITHUB_OWNER = "BrickUIApp"
+GITHUB_REPO = "BrickUIApp"
 
 [env.dev.vars]
 WORKER_ENV = "dev"
