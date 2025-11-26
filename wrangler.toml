@@ -4,6 +4,7 @@
 name = "brickui"
 compatibility_date = "2025-11-25"
 main = "./build/index.js"
+preview_urls = false
 
 #[build]
 #command = "cargo install -q worker-build && worker-build --config ./wrangler.toml"
@@ -16,14 +17,6 @@ not_found_handling = "single-page-application"
 binding = "ASSETS"
 run_worker_first = [ "/api/*" ]
 
-#[limits]
-#cpu_ms = 1000
-
-[[ratelimits]]
-name = "API_RL"
-namespace_id = "0"
-simple = { limit = 10, period = 10 }
-
 [observability]
 enabled = true
 
@@ -35,16 +28,37 @@ mode = "smart"
 [vars]
 GOOGLE_REDIRECT_URI = "https://brickui.giulioo.workers.dev/api/auth/register/google/callback"
 SUPABASE_URL = "https://gbsgahfgkgjlhtvgwtur.supabase.co"
-WORKER_ENV = "production"
 
 GITHUB_OWNER = "BrickUIApp"
 GITHUB_REPO = "BrickUIApp"
 
-[env.staging.vars]
+WORKER_ENV = "production"
+
+[env.local.vars]
 WORKER_ENV = "dev"
+
+GOOGLE_REDIRECT_URI = "https://brickui.giulioo.workers.dev/api/auth/register/google/callback"
+SUPABASE_URL = "https://gbsgahfgkgjlhtvgwtur.supabase.co"
+
+GITHUB_OWNER = "BrickUIApp"
+GITHUB_REPO = "BrickUIApp"
 
 [env.production.vars]
 WORKER_ENV = "production"
+
+GOOGLE_REDIRECT_URI = "https://brickui.giulioo.workers.dev/api/auth/register/google/callback"
+SUPABASE_URL = "https://gbsgahfgkgjlhtvgwtur.supabase.co"
+
+GITHUB_OWNER = "BrickUIApp"
+GITHUB_REPO = "BrickUIApp"
+
+[env.production.limit]
+#cpu_ms = 1000
+
+[[env.production.ratelimits]]
+name = "API_RL"
+namespace_id = "0"
+simple = { limit = 10, period = 10 }
 
 # Note: Use secrets to store sensitive data.
 # https://developers.cloudflare.com/workers/configuration/secrets/
