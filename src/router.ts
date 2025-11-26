@@ -11,7 +11,7 @@ const router = createRouter({
         if (to.query.status_code && from.name !== 'error') {
           return next({
             name: 'error',
-            query: { status_code: to.query.status_code }
+            query: to.query
           })
         }
         next()
@@ -20,9 +20,6 @@ const router = createRouter({
     {
       path: "/about",
       name: "about",
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
       component: () => import("./views/AboutView.vue"),
     },
     {

@@ -4,7 +4,7 @@
 
 <style scoped>
 canvas {
-  position: fixed;
+  position: absolute;
   top: 4rem;
   left: 0;
   width: 100%;
@@ -96,7 +96,16 @@ function drawGrid(ctx: CanvasRenderingContext2D, width: number, height: number, 
 
 function updateCanvasSize() {
   if (!canvasRef.value) return;
-  gridParams = setupCanvas(canvasRef.value, window.outerWidth + 5, window.outerHeight + 10);
+  const pageHeight = Math.max(
+    document.body.scrollHeight,
+    document.documentElement.scrollHeight,
+    document.body.offsetHeight,
+    document.documentElement.offsetHeight,
+    document.body.clientHeight,
+    document.documentElement.clientHeight
+  );
+
+  gridParams = setupCanvas(canvasRef.value, window.outerWidth + 5, pageHeight - 64); //window.outerHeight + 10
 }
 
 function animate(time: number) {

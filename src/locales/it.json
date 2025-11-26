@@ -1,0 +1,23 @@
+{
+  "title-404": "Pagina non trovata",
+  "title-500": "Errore del server",
+  "title-403": "Accesso negato",
+  "title-405": "Metodo non consentito",
+  "title-418": "Sono una teiera",
+  "title-error": "Errore",
+  "title-info": "Informazione",
+  "title-warning": "Attenzione",
+  "title-success": "Successo",
+  "unhandled-title": "Errore",
+
+  "404": "La pagina che stai cercando non esiste.",
+  "405": "Il metodo utilizzato per accedere a questa route non è consentito.",
+  "500": "Si è verificato un errore interno del server.",
+  "403": "Non hai il permesso di accedere a questa pagina.",
+  "418": "Sono una teiera ☕",
+  "error": "Si è verificato un errore.",
+  "info": "Ecco alcune informazioni.",
+  "warning": "Attenzione! Avviso generato.",
+  "success": "Operazione completata con successo.",
+  "unhandled-error-message": "Errore non gestito"
+}

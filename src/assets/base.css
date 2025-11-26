@@ -3,3 +3,18 @@
   padding: 0;
   box-sizing: border-box;
 }
+
+body {
+  background-color: black;
+  overflow-x: hidden;
+}
+
+#app {
+  display:flex;
+  flex-direction: column;
+}
+
+.n-config-provider {
+  display: flex;
+  flex-direction: column;
+}

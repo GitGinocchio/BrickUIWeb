@@ -20,7 +20,7 @@ run_worker_first = [ "/api/*" ]
 #cpu_ms = 1000
 
 [[ratelimits]]
-name = "API_RT"
+name = "API_RL"
 namespace_id = "0"
 simple = { limit = 10, period = 10 }
 
@@ -35,6 +35,13 @@ mode = "smart"
 [vars]
 GOOGLE_REDIRECT_URI = "https://brickui.giulioo.workers.dev/api/auth/register/google/callback"
 SUPABASE_URL = "https://gbsgahfgkgjlhtvgwtur.supabase.co"
+WORKER_ENV = "dev"
+
+GITHUB_OWNER = "BrickUIApp"
+GITHUB_REPO = "BrickUIApp"
+
+[env.production.vars]
+WORKER_ENV = "production"
 
 # Note: Use secrets to store sensitive data.
 # https://developers.cloudflare.com/workers/configuration/secrets/

@@ -19,11 +19,19 @@ where
     F: Fn(Request, RouteContext<()>) -> Fut,
     Fut: Future<Output = Result<Response>>
 {
-    let api_rt = ctx.env.rate_limiter(binding)?;
-    let outcome = api_rt.limit(key.into()).await?;
-    if !outcome.success {
-        return redirect_to_error(req, ctx, 429).await;
+    let is_dev = match ctx.env.var("WORKER_ENV") {
+        Ok(v) => v.to_string() == "dev",
+        Err(_) => false, // fallback a production se non definito
+    };
+
+    if !is_dev {
+        let api_rt = ctx.env.rate_limiter(binding)?;
+        let outcome = api_rt.limit(key.into()).await?;
+        if !outcome.success {
+            return redirect_to_error(req, ctx, 429).await;
+        }
     }
+
     handler(req, ctx).await
 }
 
@@ -41,6 +49,8 @@ async fn redirect_to_error(req: Request, _ctx: RouteContext<()>, status_code: u1
 async fn fetch(req: Request, env: Env, _ctx: Context) -> Result<Response> {
     Router::new()
         // Api routes
+
+        /* Register */
         .post_async(
             "/api/auth/register/classic",
             |req, ctx| async_rate_limit(req, ctx, api::auth::register::classic, "API_RL", "api")
@@ -52,6 +62,12 @@ async fn fetch(req: Request, env: Env, _ctx: Context) -> Result<Response> {
         .get_async(
             "/api/auth/register/google/callback",
             |req, ctx| async_rate_limit(req, ctx, api::auth::register::google_callback, "API_RL", "api")
+        )
+
+        /* Download */
+        .get_async(
+            "/api/download/latest",
+            |req, ctx| async_rate_limit(req, ctx, api::download::latest::get, "API_RL", "api")
         )
         
         .or_else_any_method_async("/api/*path",|req, ctx| redirect_to_error(req, ctx, 404))

@@ -14,7 +14,7 @@
                 <NButton quaternary medium>Contatti</NButton>
             </nav>
             <div>
-                <NButton secondary medium>
+                <NButton secondary medium @click="redirectToDownload">
                     <template #icon>
                         <DownloadIcon />
                     </template>
@@ -33,6 +33,17 @@
     </header>
 </template>
 
+<script setup lang="ts">
+import { h } from "vue";
+import { NButton } from "naive-ui";
+import { Download as DownloadIcon } from "lucide-vue-next";
+
+function redirectToDownload() {
+    window.location.href = "/api/download/latest";
+}
+
+</script>
+
 <style scoped> 
 header {
     position: sticky; /* rimane in cima */
@@ -41,7 +52,7 @@ header {
     align-items: center;
     backdrop-filter: blur(10px); /* sfocatura del background */
     -webkit-backdrop-filter: blur(10px); /* compatibilità Safari */
-    background: rgba(255, 255, 255, 0.05); /* trasparente leggermente bianco */
+    background: rgba(255, 255, 255, 0.015); /* trasparente leggermente bianco */
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     z-index: 1000;
     height: 64px;
@@ -58,7 +69,7 @@ header div, nav {
     justify-content: space-between;
     margin-left: 16.25rem;
     margin-right: 16.25rem;
-    height: 100%;
+    height: 64px;
 }
 
 .brand {
@@ -91,9 +102,3 @@ header div, nav {
     aspect-ratio: 1;
 }
 </style>
-
-<script setup lang="ts">
-import { h } from "vue";
-import { NButton } from "naive-ui";
-import { Download as DownloadIcon } from "lucide-vue-next";
-</script>

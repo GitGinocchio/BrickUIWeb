@@ -1,26 +1,32 @@
 <template>
-    <FlickeringBackground 
-        :color="colors.dark.accentForeground" 
-        :square-size="15"
-        :flicker-chance="0.25"
-        :max-opacity="0.2"
-    />
-    <Header />
-    <Hero />
+    <div class="container">
+        <FlickeringBackground 
+            :color="colors.dark.accentForeground" 
+            :square-size="15"
+            :flicker-chance="0.25"
+            :max-opacity="0.2"
+        />
+        <Hero class="hero" />
+        <!-- <Features /> -->
+    </div>
 </template>
 
 <script setup lang="ts">
-import FlickeringBackground from "@/components/FlickeringBackgroung.vue";
-import Header from "@/components/Header.vue";
+import FlickeringBackground from "@/components/FlickeringBackground.vue";
 import Hero from "@/components/Hero.vue";
 
 import { computed, onMounted } from "vue";
 import { colors } from "@/themes/colors.ts";
+import Features from "@/components/Features.vue";
 
 </script>
 
-<style>
-body {
-    background-color: black;
+<style scoped>
+.container {
+    flex-grow:1;
+}
+
+.hero {
+    flex-grow: 1;
 }
 </style>
