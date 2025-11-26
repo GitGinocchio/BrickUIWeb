@@ -10,7 +10,7 @@
                     </p>
                 </div>
                 <div class="buttons">
-                    <NButton class="download-nbutton" strong secondary size="large" >
+                    <NButton class="download-nbutton" strong secondary size="large" @click="redirectToDownload" >
                     <template #icon>
                         <DownloadIcon />
                     </template>
@@ -105,4 +105,8 @@ h1{
 <script setup lang="ts">
 import { Download as DownloadIcon, Github as GithubIcon } from 'lucide-vue-next';
 import { NButton } from 'naive-ui';
+
+function redirectToDownload() {
+    window.location.href = "/api/download/latest";
+}
 </script>
