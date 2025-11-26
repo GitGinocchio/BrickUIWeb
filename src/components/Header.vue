@@ -1,6 +1,6 @@
 <template>
-    <header>
-            <div class="container">
+    <header :style="{ backgroundColor: backgroundColor }">
+        <div class="container">
             <div class="brand">
                 <img src="../assets/logo.svg"></img>
                 <div>
@@ -34,7 +34,7 @@
 </template>
 
 <script setup lang="ts">
-import { h } from "vue";
+import { computed, h, onMounted, onUnmounted, ref } from "vue";
 import { NButton } from "naive-ui";
 import { Download as DownloadIcon } from "lucide-vue-next";
 
@@ -42,6 +42,23 @@ function redirectToDownload() {
     window.location.href = "/api/download/latest";
 }
 
+const scrollY = ref(0);
+
+const backgroundColor = computed(() => {
+    return `rgba(0,0,0,${Math.max(1 - scrollY.value / 250, 0.015)})`;
+});
+
+function handleScroll() {
+  scrollY.value = window.scrollY
+}
+
+onMounted(() => {
+  window.addEventListener('scroll', handleScroll)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('scroll', handleScroll)
+})
 </script>
 
 <style scoped> 
@@ -50,9 +67,10 @@ header {
     top: 0;
     width: 100%;
     align-items: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(10px); /* sfocatura del background */
     -webkit-backdrop-filter: blur(10px); /* compatibilità Safari */
-    background: rgba(255, 255, 255, 0.015); /* trasparente leggermente bianco */
+    background: rgba(0, 0, 0, 1); /* trasparente leggermente bianco */
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     z-index: 1000;
     height: 64px;

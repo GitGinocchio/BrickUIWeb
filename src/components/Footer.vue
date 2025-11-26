@@ -46,6 +46,9 @@
                     </div>
                 </div>
             </div>
+            <div class="copyright">
+                <p>© 2025 BrickUI. All rights reserved. Made with ❤️</p>
+            </div>
         </div>
     </footer>
 </template>
@@ -68,6 +71,16 @@
     gap: 3rem;
     grid-template-columns: repeat(4, minmax(0, 1fr));
     color: white;
+    padding-bottom: 3rem;
+}
+
+.copyright {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    color: #737373;
 }
 
 /* Brand */

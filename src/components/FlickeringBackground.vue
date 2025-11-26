@@ -5,7 +5,7 @@
 <style scoped>
 canvas {
   position: absolute;
-  top: 4rem;
+  top: 0;
   left: 0;
   width: 100%;
   height: 100%;
@@ -105,7 +105,7 @@ function updateCanvasSize() {
     document.documentElement.clientHeight
   );
 
-  gridParams = setupCanvas(canvasRef.value, window.outerWidth + 5, pageHeight - 64); //window.outerHeight + 10
+  gridParams = setupCanvas(canvasRef.value, window.outerWidth + 5, pageHeight); //window.outerHeight + 10
 }
 
 function animate(time: number) {
