@@ -105,7 +105,16 @@ function updateCanvasSize() {
     document.documentElement.clientHeight
   );
 
-  gridParams = setupCanvas(canvasRef.value, window.outerWidth + 5, pageHeight); //window.outerHeight + 10
+  const pageWidth = Math.max(
+    document.body.scrollWidth,
+    document.documentElement.scrollWidth,
+    document.body.offsetWidth,
+    document.documentElement.offsetWidth,
+    document.body.clientWidth,
+    document.documentElement.clientWidth
+  );
+
+  gridParams = setupCanvas(canvasRef.value, pageWidth + 5, pageHeight); //window.outerHeight + 10
 }
 
 function animate(time: number) {
