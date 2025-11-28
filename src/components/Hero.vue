@@ -25,7 +25,7 @@
                     </NButton>
                 </div>
             </div>
-            <BuildingIllustration width="700" theme="dark"></BuildingIllustration>
+            <BuildingIllustration width="700" height="700" theme="dark"></BuildingIllustration>
         </div>
     </section>
 </template>
@@ -106,8 +106,19 @@ h1{
 
 <script setup lang="ts">
 import { Download as DownloadIcon, Github as GithubIcon } from 'lucide-vue-next';
-import { NButton } from 'naive-ui';
+import { NButton, NSkeleton } from 'naive-ui';
+import { defineAsyncComponent, h, onMounted } from 'vue';
 import BuildingIllustration from './svgs/BuildingIllustration.vue';
+
+/*
+const BuildingIllustration = defineAsyncComponent({
+    loader: () => import('./svgs/BuildingIllustration.vue'),
+    loadingComponent: {
+        render() { return h(NSkeleton, { height: "700px", width: "700px", size: "large", animated: true, sharp: true }) }
+    },
+    delay: 0
+});
+*/
 
 function redirectToDownload() {
     window.location.href = "/api/download/latest";

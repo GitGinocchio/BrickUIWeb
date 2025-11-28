@@ -54,7 +54,16 @@
 }
 
 .card:hover {
+    border-color: #cb4153;
+    background-color: #e6e6e6;
     transform: translateY(-0.5rem);
+}
+
+.card:hover h3 {
+    color: #cb4153;
+}
+.card:hover p {
+    color: black;
 }
 
 .card h3 {
