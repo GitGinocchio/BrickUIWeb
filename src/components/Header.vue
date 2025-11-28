@@ -63,13 +63,14 @@ onUnmounted(() => {
 
 <style scoped> 
 header {
-    position: sticky; /* rimane in cima */
+    position: fixed; /* rimane in cima */
     top: 0;
+    left: 0;
     width: 100%;
     align-items: center;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px); /* sfocatura del background */
-    -webkit-backdrop-filter: blur(10px); /* compatibilità Safari */
+    backdrop-filter: blur(8px); /* sfocatura del background */
+    -webkit-backdrop-filter: blur(8px); /* compatibilità Safari */
     background: rgba(0, 0, 0, 1); /* trasparente leggermente bianco */
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     z-index: 1000;

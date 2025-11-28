@@ -25,9 +25,7 @@
                     </NButton>
                 </div>
             </div>
-            <div class="console-container">
-
-            </div>
+            <BuildingIllustration width="700" theme="dark"></BuildingIllustration>
         </div>
     </section>
 </template>
@@ -35,14 +33,18 @@
 <style scoped>
 
 section {
-    padding-top: 13rem;
-    padding-bottom: 8rem;
+    padding-top: 8rem;
+    padding-bottom: 10rem;
     align-self: center;
     width: 100%;
     display: flex;
 }
 
 .main-container{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
     width: 100%;
     max-width: 1400px;
     margin-right: auto;
@@ -105,6 +107,7 @@ h1{
 <script setup lang="ts">
 import { Download as DownloadIcon, Github as GithubIcon } from 'lucide-vue-next';
 import { NButton } from 'naive-ui';
+import BuildingIllustration from './svgs/BuildingIllustration.vue';
 
 function redirectToDownload() {
     window.location.href = "/api/download/latest";

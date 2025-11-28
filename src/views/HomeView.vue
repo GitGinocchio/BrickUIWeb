@@ -7,7 +7,7 @@
             :max-opacity="0.2"
         />
         <Hero class="hero" />
-        <!-- <Features /> -->
+        <Features />
     </div>
 </template>
 

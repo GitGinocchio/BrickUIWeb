@@ -1,11 +1,125 @@
 <template>
-    <div></div>
+    <div class="container">
+        <h2>Everything you need to <span>customize your desktop</span></h2>
+        <p>Powerful features designed to make desktop customization simple and enjoyable</p>
+        <div class="card-container">
+            <div class="card" v-for="feature in features">
+                <div class="icon">
+                    <component :is="feature.icon" :size="24" />
+                </div>
+                <h3>{{  feature.title }}</h3>
+                <p>{{ feature.description }}</p>
+            </div>
+        </div>
+    </div>
 </template>
 
 <style scoped>
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: white;
+    margin-bottom: 25rem;
+}
 
-div {
-    height: 500px;
-    width: 100vw;
+.container h2 {
+    line-height: 1;
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.container p {
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.card-container {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    margin-top: 4rem;
+    max-width: 1400px;
+    gap: 1rem;
+}
+
+.card {
+    padding: 1.5rem;
+    border-radius: .75rem;
+    border: 1px solid #e6e6e6;
+    border-width: 1px;
+    
+    /* Transizione fluida */
+    transition: all 0.3s cubic-bezier(.4, 0, .2, 1);
+}
+
+.card:hover {
+    transform: translateY(-0.5rem);
+}
+
+.card h3 {
+    font-weight: 600;
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+    margin-top: 1rem;
+}
+
+.card p {
+    margin-top: 1rem;
+}
+
+.icon {
+    background-color: #cb4153;
+    border-radius: .75rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    width: 3rem;
+    height: 3rem;
+
+    /* Applica transizione fluida alle trasformazioni */
+    transition-property: transform;
+    transition-timing-function: cubic-bezier(.4, 0, .2, 1);
+    transition-duration: 0.15s;
+}
+
+/* Esempio di hover per far muovere o scalare l'icona */
+.card:hover .icon {
+    transform: scale(1.1);
+}
+
+.container span {
+    display: block;
+    color: #cb4153;
 }
 </style>
+
+
+<script lang="ts" setup>
+import { Code, Palette, PanelsTopLeft, Zap } from 'lucide-vue-next';
+import { h } from 'vue';
+
+const features = [
+    {
+        icon: h(Palette),
+        title: 'Fully Customizable',
+        description: "Design widgets that match your style. Control colors, sizes, transparency, and more with an intuitive interface."
+    },
+    {
+        icon: h(PanelsTopLeft),
+        title: 'Smart Layout',
+        description: "Drag and drop widgets anywhere on your desktop. Create the perfect workspace layout that fits your workflow."
+    },
+    {
+        icon: h(Zap),
+        title: 'Lightweight & Fast',
+        description: "Minimal resource usage means your desktop stays responsive. BrickUI runs efficiently in the background."
+    },
+    {
+        icon: h(Code),
+        title: 'Developer Friendly',
+        description: "Create your own custom bricks with simple APIs. Extend functionality with plugins and scripts."
+    }
+]
+</script>

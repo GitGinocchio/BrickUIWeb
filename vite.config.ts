@@ -5,6 +5,7 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueDevTools from 'vite-plugin-vue-devtools'
 import { cloudflare } from "@cloudflare/vite-plugin"
+import tailwindcss from '@tailwindcss/vite'
 
 // Plugin custom per watchare Rust
 import { execSync } from 'child_process'
@@ -37,7 +38,8 @@ export default defineConfig({
 		vue(),
 		vueDevTools(),
 		cloudflare(),
-		rustWatcher()
+		rustWatcher(),
+    tailwindcss()
 	],
 	resolve: {
 		alias: {
