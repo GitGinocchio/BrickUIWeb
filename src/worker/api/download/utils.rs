@@ -1,8 +1,11 @@
-pub fn find_asset(assets: &[serde_json::Value], ext: &str) -> Option<String> {
-    for a in assets {
-        if let Some(name) = a["name"].as_str() {
+
+pub fn find_asset(assets: &[serde_json::Value], ext: &str) -> Option<(u64, String)> {
+    for asset in assets {
+        if let Some(name) = asset["name"].as_str() {
             if name.ends_with(ext) {
-                return a["browser_download_url"].as_str().map(|s| s.to_string());
+                if let Some(id) = asset["id"].as_u64() {
+                    return Some((id, name.to_string()));
+                }
             }
         }
     }
