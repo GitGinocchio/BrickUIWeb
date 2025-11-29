@@ -7,7 +7,7 @@
                 <div class="icon">
                     <component :is="feature.icon" :size="24" />
                 </div>
-                <h3>{{  feature.title }}</h3>
+                <h3>{{ feature.title }}</h3>
                 <p>{{ feature.description }}</p>
             </div>
         </div>
@@ -48,6 +48,7 @@
     border-radius: .75rem;
     border: 1px solid #e6e6e6;
     border-width: 1px;
+    cursor:default;
     
     /* Transizione fluida */
     transition: all 0.3s cubic-bezier(.4, 0, .2, 1);
