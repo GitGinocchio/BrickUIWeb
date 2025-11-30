@@ -9,9 +9,15 @@
                 </div>
             </div>
             <nav>
-                <NButton quaternary medium>Home</NButton>
-                <NButton quaternary medium>Chi siamo</NButton>
-                <NButton quaternary medium>Contatti</NButton>
+                <RouterLink to="/" custom v-slot="{navigate, isActive}">
+                     <NButton @click="navigate" :class="{'is-active': isActive}" quaternary medium>Home</NButton>
+                </RouterLink>
+                <RouterLink to="/about" custom v-slot="{navigate, isActive}">
+                     <NButton @click="navigate" :class="{'is-active': isActive}" quaternary medium>Chi siamo</NButton>
+                </RouterLink>
+                <RouterLink to="/contact" custom v-slot="{navigate, isActive}">
+                     <NButton @click="navigate" :class="{'is-active': isActive}" quaternary medium>Contatti</NButton>
+                </RouterLink>
             </nav>
             <div>
                 <NButton secondary medium @click="redirectToDownload">
@@ -37,6 +43,8 @@
 import { computed, h, onMounted, onUnmounted, ref } from "vue";
 import { NButton } from "naive-ui";
 import { Download as DownloadIcon } from "lucide-vue-next";
+import { RouterLink } from "vue-router";
+
 
 function redirectToDownload() {
     window.location.href = "/api/download/latest";
@@ -120,4 +128,10 @@ header div, nav {
     width: 40px;
     aspect-ratio: 1;
 }
+
+.is-active{
+    background-color: #a0323f;
+}
+
+
 </style>
