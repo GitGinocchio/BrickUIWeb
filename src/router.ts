@@ -23,6 +23,11 @@ const router = createRouter({
       component: () => import("./views/AboutView.vue"),
     },
     {
+      path: "/devpipeline",
+      name: "pipeline",
+      component: () => import("./views/DevPipeline.vue")
+    },
+    {
       path: "/:pathMatch(.*)*",
       name: "error",
       component: () => import("./views/Error.vue"),

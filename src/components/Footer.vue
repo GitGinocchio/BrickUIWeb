@@ -15,6 +15,7 @@
                         <li><a href="/features">Features</a></li>
                         <li><a href="/api/download/latest">Download</a></li>
                         <li><a href="/documentation">Documentation</a></li>
+                        <li><a href="/devpipeline">Pipeline</a></li>
                     </ul>
                 </div>
                 <div class="link-list">
