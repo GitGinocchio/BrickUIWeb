@@ -3,7 +3,7 @@
 
 name = "brickui"
 compatibility_date = "2025-11-25"
-main = "./build/index.js"
+main = "./dist/brickui/index.js"
 preview_urls = true
 
 #[build]
