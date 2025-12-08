@@ -7,7 +7,8 @@ use worker::*;
 struct ClassicRegisterRequest {
     email: String,
     password: String,
-    phone: Option<String>
+    phone: Option<String>,
+    display_name: Option<String>
 }
 
 pub async fn classic(mut req: Request, ctx: RouteContext<()>) -> Result<Response> {
@@ -24,10 +25,15 @@ pub async fn classic(mut req: Request, ctx: RouteContext<()>) -> Result<Response
         "phone": body.phone,
         "email_confirm": false,
         "phone_confirm": false,
+        "user_metadata": {}
     });
 
     if let Some(phone) = body.phone {
         payload["phone"] = serde_json::Value::String(phone);
+    }
+
+    if let Some(display_name) = &body.display_name {
+        payload["user_metadata"]["display_name"] = serde_json::Value::String(display_name.clone());
     }
 
     let client = Client::new();
