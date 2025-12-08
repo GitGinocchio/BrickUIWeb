@@ -64,6 +64,24 @@ async fn fetch(req: Request, env: Env, _ctx: Context) -> Result<Response> {
             |req, ctx| async_rate_limit(req, ctx, api::auth::register::google_callback, "API_RL", "api")
         )
 
+        /* Unregister */
+        .delete_async(
+            "/api/auth/unregister",
+            |req, ctx| async_rate_limit(req, ctx, api::auth::unregister::unregister, "API_RL", "api")
+        )
+
+        /* Login */
+        .post_async(
+            "/api/auth/login",
+            |req, ctx| async_rate_limit(req, ctx, api::auth::login::login, "API_RL", "api")
+        )
+
+        /* Logout */
+        .post_async(
+            "/api/auth/logout",
+            |req, ctx| async_rate_limit(req, ctx, api::auth::logout::logout, "API_RL", "api")
+        )
+
         /* Download */
         .get_async(
             "/api/download/latest",

@@ -1,5 +1,6 @@
 use serde::{Deserialize, Serialize};
-use std::str::FromStr as _;
+use serde_json::Value;
+use std::{collections::HashMap, str::FromStr as _};
 use reqwest::Client;
 use worker::*;
 
@@ -8,7 +9,9 @@ struct ClassicRegisterRequest {
     email: String,
     password: String,
     phone: Option<String>,
-    display_name: Option<String>
+
+    #[serde(flatten)]
+    extra: HashMap<String, Value>,
 }
 
 pub async fn classic(mut req: Request, ctx: RouteContext<()>) -> Result<Response> {
@@ -29,17 +32,12 @@ pub async fn classic(mut req: Request, ctx: RouteContext<()>) -> Result<Response
     });
 
     if let Some(phone) = body.phone {
-        payload["phone"] = serde_json::Value::String(phone);
+        payload["phone"] = Value::String(phone);
     }
 
-    if let Some(display_name) = &body.display_name {
-        payload["user_metadata"]["display_name"] = serde_json::Value::String(display_name.clone());
+    for (key, value) in body.extra.into_iter() {
+        payload["user_metadata"][key] = value;
     }
-
-    // Fare in modo che tutto quello che non viene riconosciuto come parametro venga automaticamente
-    // messo all'interno di user_metadata
-
-    // Passare in user_metadata anche avatar_url
 
     let client = Client::new();
     let response = client
@@ -52,12 +50,15 @@ pub async fn classic(mut req: Request, ctx: RouteContext<()>) -> Result<Response
         .await
         .map_err(|e| format!("Error sending request: {e}"))?;
 
+    let status_code = response.status().as_u16();
     let body = response
         .text()
         .await
         .map_err(|e| format!("Error obtaining response body: {e}"))?;
 
-    Response::from_body(ResponseBody::Body(body.into_bytes()))
+    Ok(Response::from_body(ResponseBody::Body(body.into_bytes()))
+        .map_err(|e| format!("Error creating response: {e}"))?
+        .with_status(status_code))
 }
 
 pub async fn google_start(mut _req: Request, ctx: RouteContext<()>) -> Result<Response> {
