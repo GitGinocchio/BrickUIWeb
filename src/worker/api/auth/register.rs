@@ -36,6 +36,9 @@ pub async fn classic(mut req: Request, ctx: RouteContext<()>) -> Result<Response
         payload["user_metadata"]["display_name"] = serde_json::Value::String(display_name.clone());
     }
 
+    // Fare in modo che tutto quello che non viene riconosciuto come parametro venga automaticamente
+    // messo all'interno di user_metadata
+
     let client = Client::new();
     let response = client
         .post(format!("{}/auth/v1/admin/users", supabase_url))
