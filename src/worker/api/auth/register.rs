@@ -39,6 +39,8 @@ pub async fn classic(mut req: Request, ctx: RouteContext<()>) -> Result<Response
     // Fare in modo che tutto quello che non viene riconosciuto come parametro venga automaticamente
     // messo all'interno di user_metadata
 
+    // Passare in user_metadata anche avatar_url
+
     let client = Client::new();
     let response = client
         .post(format!("{}/auth/v1/admin/users", supabase_url))
