@@ -3,7 +3,7 @@
 </template>
 
 
-<script setup>
+<script setup lang="ts">
 import { ref } from 'vue'
 import svgContentRaw from '@/assets/images/Building.svg?raw';
 

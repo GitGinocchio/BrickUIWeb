@@ -108,7 +108,7 @@ h1{
 import { Download as DownloadIcon, Github as GithubIcon } from 'lucide-vue-next';
 import { NButton, NSkeleton } from 'naive-ui';
 import { defineAsyncComponent, h, onMounted } from 'vue';
-//import BuildingIllustration from './svgs/BuildingIllustration.vue';
+import BuildingIllustration from './svgs/BuildingIllustration.vue';
 
 /*
 const BuildingIllustration = defineAsyncComponent({
