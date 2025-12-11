@@ -1,13 +1,7 @@
 <template>
     <iframe
         src="https://trello.com/b/0H5Yn2mK.html"
-        color="black"
-        style="filter:  invert(10)
-                        hue-rotate(180deg)
-                        brightness(0.3)
-                        contrast(3)
-                        grayscale(1)
-                        saturate(1);"
+        sandbox="allow-scripts allow-same-origin allow-popups"
         :width="pageWidth" 
         :height="pageHeight"
     />
