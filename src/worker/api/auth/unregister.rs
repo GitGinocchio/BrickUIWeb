@@ -12,7 +12,7 @@ fn get_user_id_from_jwt(token: &str) -> Option<String> {
     json.get("sub")?.as_str().map(|s| s.to_string())
 }
 
-pub async fn unregister(req: Request, ctx: RouteContext<()>) -> Result<Response> {
+pub async fn delete_unregister(req: Request, ctx: RouteContext<()>) -> Result<Response> {
     let supabase_url = ctx.env.var("SUPABASE_URL")?;
     let supabase_key = ctx.env.var("SUPABASE_KEY")?;
 

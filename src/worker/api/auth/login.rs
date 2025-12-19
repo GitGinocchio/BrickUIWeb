@@ -13,7 +13,7 @@ struct ClassicLoginRequest {
     extra: HashMap<String, Value>, // campi extra, se in futuro servono
 }
 
-pub async fn login(mut req: Request, ctx: RouteContext<()>) -> Result<Response> {
+pub async fn post_login(mut req: Request, ctx: RouteContext<()>) -> Result<Response> {
     let body: ClassicLoginRequest = req.json().await?;
 
     let supabase_url = ctx.env.var("SUPABASE_URL")?;

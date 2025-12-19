@@ -1,6 +1,6 @@
 use worker::*;
 
-pub async fn logout(req: Request, ctx: RouteContext<()>) -> Result<Response> {
+pub async fn post_logout(req: Request, ctx: RouteContext<()>) -> Result<Response> {
     let supabase_url = ctx.env.var("SUPABASE_URL")?;
     let supabase_key = ctx.env.var("SUPABASE_KEY")?;
 
