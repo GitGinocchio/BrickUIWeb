@@ -1,8 +1,11 @@
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
+use urlencoding::encode;
 use std::{collections::HashMap, str::FromStr as _};
 use reqwest::Client;
 use worker::*;
+
+use crate::errors::json_error;
 
 #[derive(Deserialize, Serialize)]
 struct ClassicRegisterRequest {
@@ -19,6 +22,7 @@ pub async fn post_classic(mut req: Request, ctx: RouteContext<()>) -> Result<Res
     let body: ClassicRegisterRequest = req.json().await?;
     
     let supabase_url = ctx.env.var("SUPABASE_URL")?;
+    let supabase_key = ctx.env.var("SUPABASE_KEY")?;
     let supabase_anon_key = ctx.env.var("SUPABASE_ANON_KEY")?;
 
     let mut user_metadata = serde_json::Map::new();
@@ -33,14 +37,43 @@ pub async fn post_classic(mut req: Request, ctx: RouteContext<()>) -> Result<Res
         }
     });
 
+    let query;
+
     if let Some(email) = body.email {
+        query = format!(
+            "{}/auth/v1/admin/users?email=eq.{}&select=id,email,phone",
+            supabase_url, encode(&email)
+        );
         payload["email"] = Value::String(email);
     }
-    if let Some(phone) = body.phone {
+    else if let Some(phone) = body.phone {
+        query = format!(
+            "{}/auth/v1/admin/users?phone=eq.{}&select=id,email,phone",
+            supabase_url, encode(&phone)
+        );
         payload["phone"] = Value::String(phone);
+    }
+    else {
+        return json_error(400, "missing_fields", "Email or phone required");
     }
 
     let client = Client::new();
+    let check_response = client
+        .get(&query)
+        .header("apikey", supabase_key.to_string())
+        .header("Authorization", format!("Bearer {}", supabase_key))
+        .send()
+        .await
+        .map_err(|e| format!("Error querying users: {}", e))?
+        .text()
+        .await
+        .map_err(|e| format!("Error obtaining text response: {e}"))?;
+
+    let users: Value = serde_json::from_str(&check_response)?;
+    if let Some(array) = users["users"].as_array() && !array.is_empty() {
+        return json_error(409, "user_exists", "An account with this email or phone number already exists");
+    }
+
     let response = client
         .post(format!("{}/auth/v1/signup", supabase_url))
         .header("apikey", supabase_anon_key.to_string())

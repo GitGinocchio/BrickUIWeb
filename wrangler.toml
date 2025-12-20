@@ -8,9 +8,9 @@ main = "./build/index.js"
 workers_dev = true
 preview_urls = true
 
-[[routes]]
-pattern = "brickui.app"
-custom_domain = true
+routes = [
+  { pattern = "brickui.app", custom_domain = true }
+]
 
 #[build]
 #command = "cargo install -q worker-build && worker-build --config ./wrangler.toml"
