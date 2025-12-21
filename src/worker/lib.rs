@@ -32,11 +32,11 @@ async fn fetch(req: Request, env: Env, _ctx: Context) -> Result<Response> {
             |req, ctx| async_rate_limit(req, ctx, api::auth::register::get_google_callback, "API_RL", "api")
         )
         
-        /* Verify */
+        /* Confirm */
 
         .get_async(
-            "/api/auth/verify",
-            |req, ctx| async_rate_limit(req, ctx, api::auth::verify::get_verify, "API_RL", "api")
+            "/api/auth/confirm",
+            |req, ctx| async_rate_limit(req, ctx, api::auth::confirm::get_confirm, "API_RL", "api")
         )
 
         /* Bricks */

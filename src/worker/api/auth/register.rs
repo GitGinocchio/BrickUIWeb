@@ -20,6 +20,9 @@ struct ClassicRegisterRequest {
 
 pub async fn post_classic(mut req: Request, ctx: RouteContext<()>) -> Result<Response> {
     let body: ClassicRegisterRequest = req.json().await?;
+    let user_agent = req.headers().get("user-agent").unwrap_or_default();
+
+    console_log!("user_agent: {user_agent:?}");
     
     let supabase_url = ctx.env.var("SUPABASE_URL")?;
     let supabase_key = ctx.env.var("SUPABASE_KEY")?;
@@ -30,10 +33,18 @@ pub async fn post_classic(mut req: Request, ctx: RouteContext<()>) -> Result<Res
         user_metadata.insert(k, v);
     }
 
+    let email_redirect_to = if let Some(ua) = user_agent && ua.starts_with("BrickUIApp") {
+        "brickui://"
+    } else {
+        "https://brickui.app"
+    };
+
     let mut payload = serde_json::json!({
         "password": body.password,
         "options": {
-            "data": user_metadata
+            "data": user_metadata,
+            "emailRedirectTo": email_redirect_to,
+            "email_redirect_to": email_redirect_to
         }
     });
 
