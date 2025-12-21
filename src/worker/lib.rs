@@ -18,7 +18,7 @@ async fn fetch(req: Request, env: Env, _ctx: Context) -> Result<Response> {
     Router::new()
         // Api routes
 
-        /* Register */
+        // Register
         .post_async(
             "/api/auth/register/classic",
             |req, ctx| async_rate_limit(req, ctx, api::auth::register::post_classic, "API_RL", "api")
@@ -32,16 +32,21 @@ async fn fetch(req: Request, env: Env, _ctx: Context) -> Result<Response> {
             |req, ctx| async_rate_limit(req, ctx, api::auth::register::get_google_callback, "API_RL", "api")
         )
         
-        /* Confirm */
+        // Confirm
 
         .get_async(
             "/api/auth/confirm",
             |req, ctx| async_rate_limit(req, ctx, api::auth::confirm::get_confirm, "API_RL", "api")
         )
 
-        /* Bricks */
+        // Resend
 
-        /* Bricks - Meta (GET/POST) */
+        .post_async(
+            "/api/auth/resend",
+            |req, ctx| async_rate_limit(req, ctx, api::auth::resend::post_resend, "API_RL", "api")
+        )
+
+        // Bricks - Meta (GET/POST)
 
         .get_async(
             "/api/bricks/:brick_id/:version/meta",
@@ -53,7 +58,7 @@ async fn fetch(req: Request, env: Env, _ctx: Context) -> Result<Response> {
             |req, ctx| async_rate_limit(req, ctx, api::bricks::meta::post, "API_RL", "api")
         )
 
-        /* Bricks - Media (GET/POST) */
+        // Bricks - Media (GET/POST)
 
         .get_async(
             "/api/bricks/:brick_id/:version/media",
@@ -65,7 +70,7 @@ async fn fetch(req: Request, env: Env, _ctx: Context) -> Result<Response> {
             |req, ctx| async_rate_limit(req, ctx, api::bricks::media::post, "API_RL", "api")
         )
 
-        /* Bricks - Code (GET/POST) */
+        // Bricks - Code (GET/POST)
 
         .get_async(
             "/api/bricks/:brick_id/:version/code",
@@ -77,25 +82,25 @@ async fn fetch(req: Request, env: Env, _ctx: Context) -> Result<Response> {
             |req, ctx| async_rate_limit(req, ctx, api::bricks::code::post, "API_RL", "api")
         )
 
-        /* Unregister */
+        // Unregister
         .delete_async(
             "/api/auth/unregister",
             |req, ctx| async_rate_limit(req, ctx, api::auth::unregister::delete_unregister, "API_RL", "api")
         )
 
-        /* Login */
+        // Login
         .post_async(
             "/api/auth/login",
             |req, ctx| async_rate_limit(req, ctx, api::auth::login::post_login, "API_RL", "api")
         )
 
-        /* Logout */
+        // Logout
         .post_async(
             "/api/auth/logout",
             |req, ctx| async_rate_limit(req, ctx, api::auth::logout::post_logout, "API_RL", "api")
         )
 
-        /* Download */
+        // Download
         .get_async(
             "/api/download/latest",
             |req, ctx| async_rate_limit(req, ctx, api::download::latest::get, "API_RL", "api")

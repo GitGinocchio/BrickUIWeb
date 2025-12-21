@@ -19,7 +19,7 @@ function rustWatcher() {
         console.log(`⚡ Rust file changed: ${file}`)
         try {
           execSync(
-            'cargo install -q worker-build && worker-build --config ./wrangler.toml',
+            'worker-build',
             { stdio: "inherit" }
           )
 		      console.log("✅ Build worker rust completata con successo")
