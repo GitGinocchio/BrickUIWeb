@@ -13,7 +13,7 @@ routes = [
 ]
 
 [build]
-command = "cargo install -q worker-build && worker-build"
+command = "cargo install -q worker-build && npm run build"
 #cwd = "."
 #watch_dir = "."
 
