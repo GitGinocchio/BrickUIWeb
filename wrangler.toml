@@ -12,8 +12,8 @@ routes = [
   { pattern = "brickui.app", custom_domain = true }
 ]
 
-#[build]
-#command = "cargo install -q worker-build && worker-build --config ./wrangler.toml"
+[build]
+command = "cargo install -q worker-build && worker-build"
 #cwd = "."
 #watch_dir = "."
 
