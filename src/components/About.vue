@@ -212,7 +212,7 @@
         max-width: 19rem;
     }
 
-    .timeline-box h4 {
+    .timeline-box h4, .squadra .role {
         color: #a0323f;
     }
 
