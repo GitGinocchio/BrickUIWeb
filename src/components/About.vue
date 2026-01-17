@@ -288,8 +288,8 @@
     ]);
 
     const team = ref([
-        { name : "Ginocchio", cognome : "Ginocchio", role : "Leader, Founder & Backend Developer", about : "Type something after this is just some test" },
-        { name : "Scelli", cognome : "Scelli", role : "Fronend Developer", about : "Type something after this is just some test" },
+        { name : "Giulio", cognome : "Tognetto", role : "Founder & Backend Developer", about : "Type something after this is just some test" },
+        { name : "Deniel", cognome : "Bertolini", role : "Frontend Developer", about : "Type something after this is just some test" },
         { name : "Keon Ymerson", cognome : "Lacbay", role : "Frontend Developer", about : "Type something after this is just some test" }
     ]);
 </script>
