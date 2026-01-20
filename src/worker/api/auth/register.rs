@@ -5,7 +5,7 @@ use std::{collections::HashMap, str::FromStr as _};
 use reqwest::Client;
 use worker::*;
 
-use crate::errors::json_error;
+use crate::{api::users, errors::json_error};
 
 #[derive(Deserialize, Serialize)]
 struct ClassicRegisterRequest {
@@ -22,23 +22,31 @@ pub async fn post_classic(mut req: Request, ctx: RouteContext<()>) -> Result<Res
     let body: ClassicRegisterRequest = req.json().await?;
     let user_agent = req.headers().get("user-agent").unwrap_or_default();
 
-    console_log!("user_agent: {user_agent:?}");
-    
+    console_log!("user_agent: {:?}", user_agent);
+
+    // variabili d'ambiente
     let supabase_url = ctx.env.var("SUPABASE_URL")?;
     let supabase_key = ctx.env.var("SUPABASE_KEY")?;
     let supabase_anon_key = ctx.env.var("SUPABASE_ANON_KEY")?;
 
+    // user_metadata
     let mut user_metadata = serde_json::Map::new();
     for (k, v) in body.extra.into_iter() {
         user_metadata.insert(k, v);
     }
 
-    let email_redirect_to = if let Some(ua) = user_agent && ua.starts_with("BrickUIApp") {
-        "brickui://"
+    // redirect email in base al client
+    let email_redirect_to = if let Some(ua) = user_agent.as_ref() {
+        if ua.starts_with("BrickUIApp") {
+            "brickui://"
+        } else {
+            "https://brickui.app"
+        }
     } else {
         "https://brickui.app"
     };
 
+    // payload base per signup
     let mut payload = serde_json::json!({
         "password": body.password,
         "options": {
@@ -48,29 +56,10 @@ pub async fn post_classic(mut req: Request, ctx: RouteContext<()>) -> Result<Res
         }
     });
 
-    let query;
-
-    if let Some(email) = body.email {
-        query = format!(
-            "{}/auth/v1/admin/users?email=eq.{}&select=id,email,phone",
-            supabase_url, encode(&email)
-        );
-        payload["email"] = Value::String(email);
-    }
-    else if let Some(phone) = body.phone {
-        query = format!(
-            "{}/auth/v1/admin/users?phone=eq.{}&select=id,email,phone",
-            supabase_url, encode(&phone)
-        );
-        payload["phone"] = Value::String(phone);
-    }
-    else {
-        return json_error(400, "missing_fields", "Email or phone required");
-    }
-
+    // check email/phone
     let client = Client::new();
-    let check_response = client
-        .get(&query)
+    let users_json = client
+        .get(format!("{}/auth/v1/admin/users", supabase_url))
         .header("apikey", supabase_key.to_string())
         .header("Authorization", format!("Bearer {}", supabase_key))
         .send()
@@ -80,11 +69,27 @@ pub async fn post_classic(mut req: Request, ctx: RouteContext<()>) -> Result<Res
         .await
         .map_err(|e| format!("Error obtaining text response: {e}"))?;
 
-    let users: Value = serde_json::from_str(&check_response)?;
-    if let Some(array) = users["users"].as_array() && !array.is_empty() {
-        return json_error(409, "user_exists", "An account with this email or phone number already exists");
+    let users_map: Value = serde_json::from_str(&users_json)?;
+    let users = users_map["users"].as_array().ok_or("Unexpected response format")?;
+
+    // filtro lato Rust
+    if let Some(email) = body.email.as_ref() {
+        let email = email.trim();
+        payload["email"] = Value::String(email.to_string());
+        if users.iter().any(|u| u["email"].as_str() == Some(email)) {
+            return json_error(409, "user_exists", "An account with this email already exists");
+        }
+    } else if let Some(phone) = body.phone.as_ref() {
+        let phone = phone.trim();
+        payload["phone"] = Value::String(phone.to_string());
+        if users.iter().any(|u| u["phone"].as_str() == Some(phone)) {
+            return json_error(409, "user_exists", "An account with this phone number already exists");
+        }
+    } else {
+        return json_error(400, "missing_fields", "Email or phone required");
     }
 
+    // signup vero e proprio
     let response = client
         .post(format!("{}/auth/v1/signup", supabase_url))
         .header("apikey", supabase_anon_key.to_string())
