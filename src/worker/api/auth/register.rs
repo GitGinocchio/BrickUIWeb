@@ -5,7 +5,7 @@ use std::{collections::HashMap, str::FromStr as _};
 use reqwest::Client;
 use worker::*;
 
-use crate::{api::users, errors::json_error};
+use crate::{CLIENT, api::users, errors::json_error};
 
 #[derive(Deserialize, Serialize)]
 struct ClassicRegisterRequest {
@@ -21,8 +21,6 @@ struct ClassicRegisterRequest {
 pub async fn post_classic(mut req: Request, ctx: RouteContext<()>) -> Result<Response> {
     let body: ClassicRegisterRequest = req.json().await?;
     let user_agent = req.headers().get("user-agent").unwrap_or_default();
-
-    console_log!("user_agent: {:?}", user_agent);
 
     // variabili d'ambiente
     let supabase_url = ctx.env.var("SUPABASE_URL")?;
@@ -57,8 +55,7 @@ pub async fn post_classic(mut req: Request, ctx: RouteContext<()>) -> Result<Res
     });
 
     // check email/phone
-    let client = Client::new();
-    let users_json = client
+    let users_json = CLIENT
         .get(format!("{}/auth/v1/admin/users", supabase_url))
         .header("apikey", supabase_key.to_string())
         .header("Authorization", format!("Bearer {}", supabase_key))
@@ -90,7 +87,7 @@ pub async fn post_classic(mut req: Request, ctx: RouteContext<()>) -> Result<Res
     }
 
     // signup vero e proprio
-    let response = client
+    let response = CLIENT
         .post(format!("{}/auth/v1/signup", supabase_url))
         .header("apikey", supabase_anon_key.to_string())
         .header("Content-Type", "application/json")

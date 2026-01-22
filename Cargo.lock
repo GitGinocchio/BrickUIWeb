@@ -173,6 +173,7 @@ dependencies = [
  "console_error_panic_hook",
  "http",
  "infer",
+ "once_cell",
  "reqwest",
  "serde",
  "serde_json",

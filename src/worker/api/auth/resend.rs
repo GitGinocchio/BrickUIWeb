@@ -5,7 +5,7 @@ use urlencoding::encode;
 use reqwest::Client;
 use worker::*;
 
-use crate::errors::{json_error, json_error_with_data};
+use crate::{CLIENT, errors::{json_error, json_error_with_data}};
 
 #[derive(Deserialize)]
 pub struct ResendRequest {
@@ -29,8 +29,7 @@ pub async fn post_resend(mut req: Request, ctx: RouteContext<()>) -> Result<Resp
         encode(&body.email)
     );
 
-    let client = Client::new();
-    let user_response = client
+    let user_response = CLIENT
         .get(&query)
         .header("apikey", supabase_key.to_string())
         .header("Authorization", format!("Bearer {}", supabase_key))
@@ -85,7 +84,7 @@ pub async fn post_resend(mut req: Request, ctx: RouteContext<()>) -> Result<Resp
         "email_redirect_to": body.redirect_to
     });
 
-    let resend_response = client
+    let resend_response = CLIENT
         .post(format!("{}/auth/v1/resend", supabase_url))
         .header("apikey", supabase_anon_key.to_string())
         .header("Content-Type", "application/json")

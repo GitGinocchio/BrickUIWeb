@@ -1,3 +1,5 @@
+use reqwest::Client;
+use once_cell::sync::Lazy;
 use worker::*;
 
 pub mod errors;
@@ -7,6 +9,10 @@ pub mod storage;
 
 use crate::utils::async_rate_limit;
 use crate::utils::redirect_to_error;
+
+pub static CLIENT: Lazy<Client> = Lazy::new(|| {
+    Client::new()
+});
 
 #[event(start)]
 fn init() {
@@ -92,6 +98,12 @@ async fn fetch(req: Request, env: Env, _ctx: Context) -> Result<Response> {
         .post_async(
             "/api/auth/login",
             |req, ctx| async_rate_limit(req, ctx, api::auth::login::post_login, "API_RL", "api")
+        )
+
+        // Refresh session
+        .post_async(
+            "/api/auth/refresh",
+            |req, ctx| async_rate_limit(req, ctx, api::auth::refresh::post_refresh, "API_RL", "api")
         )
 
         // Logout

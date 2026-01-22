@@ -6,3 +6,4 @@ pub mod logout;
 
 pub mod resend;
 pub mod confirm;
+pub mod refresh;

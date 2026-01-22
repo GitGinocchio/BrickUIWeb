@@ -3,6 +3,8 @@ use base64::engine::general_purpose::STANDARD as b64;
 use serde_json::Value;
 use worker::*;
 
+use crate::CLIENT;
+
 fn get_user_id_from_jwt(token: &str) -> Option<String> {
     let parts: Vec<&str> = token.split('.').collect();
     if parts.len() != 3 { return None; }
@@ -28,9 +30,7 @@ pub async fn delete_unregister(req: Request, ctx: RouteContext<()>) -> Result<Re
         None => return Response::error("Invalid JWT", 400),
     };
 
-    let client = reqwest::Client::new();
-
-    let response = client
+    let response = CLIENT
         .delete(format!("{}/auth/v1/admin/users/{}", supabase_url, user_id))
         .header("apikey", supabase_key.to_string())
         .header("Authorization", format!("Bearer {}", supabase_key)) // service key

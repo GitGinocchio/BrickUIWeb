@@ -1,4 +1,5 @@
 use std::future::Future;
+use serde_json::json;
 use worker::*;
 
 pub fn is_dev(env: &Env) -> bool {
@@ -31,11 +32,32 @@ where
 }
 
 pub async fn redirect_to_error(req: Request, _ctx: RouteContext<()>, status_code: u16) -> Result<Response> {
-    let mut url = req.url().map_err(|e| worker::Error::RustError(format!("Url error: {e}")))?;
+    let wants_json = req
+        .headers()
+        .get("content-type")
+        .map_or(false, |ct| {
+            if let Some(ct) = ct {
+                return ct.to_lowercase().contains("application/json");
+            }
 
-    let query = format!("status_code={status_code}");
-    url.set_query(Some(&query));
-    url.set_path("/");
+            false
+        });
 
-    Response::redirect(url)
+    if wants_json {
+        let payload = json!({
+            "code": status_code,
+            "status_code": status_code,
+            "msg": format!("An error occurred: {}", status_code)
+        });
+
+        Response::from_json(&payload)
+            .map(|res| res.with_status(status_code))
+    } else {
+        // Redirect classico
+        let mut url = req.url().map_err(|e| worker::Error::RustError(format!("Url error: {e}")))?;
+        url.set_path("/"); // redirect alla root
+        url.set_query(Some(&format!("status_code={}", status_code)));
+
+        Response::redirect(url)
+    }
 }
