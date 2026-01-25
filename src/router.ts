@@ -23,6 +23,11 @@ const router = createRouter({
       component: () => import("./views/AboutView.vue"),
     },
     {
+      path: "/auth/confirmed",
+      name: "auth_confirmed",
+      component: () => import("./views/AuthConfirmed.vue")
+    },
+    {
       path: "/devpipeline",
       name: "pipeline",
       component: () => import("./views/DevPipeline.vue")

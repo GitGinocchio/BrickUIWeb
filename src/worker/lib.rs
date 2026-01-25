@@ -1,5 +1,6 @@
 use reqwest::Client;
 use once_cell::sync::Lazy;
+use resend_rs::Resend;
 use worker::*;
 
 pub mod errors;

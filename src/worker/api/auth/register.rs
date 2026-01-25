@@ -1,3 +1,4 @@
+use resend_rs::{Resend, types::{CreateEmailBaseOptions, EmailTemplate}};
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 use urlencoding::encode;
@@ -5,7 +6,7 @@ use std::{collections::HashMap, str::FromStr as _};
 use reqwest::Client;
 use worker::*;
 
-use crate::{CLIENT, api::users, errors::json_error};
+use crate::{CLIENT, api::{auth::{EmailData, User}, users}, errors::json_error};
 
 #[derive(Deserialize, Serialize)]
 struct ClassicRegisterRequest {
@@ -25,7 +26,8 @@ pub async fn post_classic(mut req: Request, ctx: RouteContext<()>) -> Result<Res
     // variabili d'ambiente
     let supabase_url = ctx.env.var("SUPABASE_URL")?;
     let supabase_key = ctx.env.var("SUPABASE_KEY")?;
-    let supabase_anon_key = ctx.env.var("SUPABASE_ANON_KEY")?;
+    let resend_key = ctx.env.var("RESEND_KEY")?;
+    //let supabase_anon_key = ctx.env.var("SUPABASE_ANON_KEY")?;
 
     // user_metadata
     let mut user_metadata = serde_json::Map::new();
@@ -33,10 +35,10 @@ pub async fn post_classic(mut req: Request, ctx: RouteContext<()>) -> Result<Res
         user_metadata.insert(k, v);
     }
 
-    // redirect email in base al client
-    let email_redirect_to = if let Some(ua) = user_agent.as_ref() {
+    // redirect_url based on the user_agent
+    let redirect_to = if let Some(ua) = user_agent.as_ref() {
         if ua.starts_with("BrickUIApp") {
-            "brickui://"
+            "http://localhost:5173/auth/confirmed"
         } else {
             "https://brickui.app"
         }
@@ -44,14 +46,14 @@ pub async fn post_classic(mut req: Request, ctx: RouteContext<()>) -> Result<Res
         "https://brickui.app"
     };
 
+    console_log!("{redirect_to}");
+
     // payload base per signup
     let mut payload = serde_json::json!({
+        "type": "signup",
         "password": body.password,
-        "options": {
-            "data": user_metadata,
-            "emailRedirectTo": email_redirect_to,
-            "email_redirect_to": email_redirect_to
-        }
+        "data": user_metadata,
+        "redirect_to": redirect_to
     });
 
     // check email/phone
@@ -88,8 +90,9 @@ pub async fn post_classic(mut req: Request, ctx: RouteContext<()>) -> Result<Res
 
     // signup vero e proprio
     let response = CLIENT
-        .post(format!("{}/auth/v1/signup", supabase_url))
-        .header("apikey", supabase_anon_key.to_string())
+        .post(format!("{}/auth/v1/admin/generate_link", supabase_url))
+        .header("apikey", supabase_key.to_string())
+        .header("Authorization", format!("Bearer {}", supabase_key))
         .header("Content-Type", "application/json")
         .body(payload.to_string())
         .send()
@@ -102,9 +105,39 @@ pub async fn post_classic(mut req: Request, ctx: RouteContext<()>) -> Result<Res
         .await
         .map_err(|e| format!("Error obtaining response body: {e}"))?;
 
-    Ok(Response::from_body(ResponseBody::Body(response_body.into_bytes()))
+    let email_data: EmailData = serde_json::from_str(&response_body)
+        .map_err(|e| format!("Error deserializing json: {e}"))?;
+
+    let user_data: User = serde_json::from_str(&response_body)
+        .map_err(|e| format!("Error deserializing json: {e}"))?;
+
+    if let Some(email_address) = &user_data.email {
+        let resend = Resend::new(&resend_key.to_string());
+
+        let mut variables = HashMap::<String, Value>::new();
+        variables.insert("USER_NAME".into(), Value::String(email_address.clone()));
+        variables.insert(
+            "VERIFY_URL".into(), 
+            Value::String(format!("{}/api/auth/confirm?token={}&redirect_to={}", email_data.redirect_to, email_data.hashed_token, "https://brickui.app/auth/confirmed"))
+        );
+
+        let template = EmailTemplate::new("confirm-registration").with_variables(variables);
+        let opts = CreateEmailBaseOptions::new(
+            "BrickUI <brickui@mail.brickui.app>", 
+            vec![email_address], 
+            "Almost done! Confirm your BrickUI account"
+        ).with_template(template);
+
+        let _email = resend.emails
+            .send(opts)
+            .await
+            .map_err(|e| format!("Error sending email: {e}"))?;
+    }
+
+    Ok(Response::from_body(ResponseBody::Body(serde_json::to_vec(&user_data)?))
         .map_err(|e| format!("Error creating response: {e}"))?
         .with_status(status_code))
+
 }
 
 pub async fn get_google_start(mut _req: Request, ctx: RouteContext<()>) -> Result<Response> {
