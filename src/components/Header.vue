@@ -91,7 +91,7 @@ header {
     position: fixed;
     top: 0;
     left: 0;
-    width: 100vw;
+    width: 100%;
     align-items: center;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(8px);
@@ -102,9 +102,9 @@ header {
 }
 
 nav {
-    flex: 1;
-    display: flex;
-    justify-content: center;
+    position: absolute;
+    left: 50.30%;
+    transform: translateX(-50%);
 }
 
 header div, nav {
