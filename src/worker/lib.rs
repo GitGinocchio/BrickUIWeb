@@ -25,7 +25,7 @@ async fn fetch(req: Request, env: Env, _ctx: Context) -> Result<Response> {
     Router::new()
         // Api routes
 
-        // Register
+        // Auth - Register
         .post_async(
             "/api/auth/register/classic",
             |req, ctx| async_rate_limit(req, ctx, api::auth::register::post_classic, "API_RL", "api")
@@ -39,18 +39,53 @@ async fn fetch(req: Request, env: Env, _ctx: Context) -> Result<Response> {
             |req, ctx| async_rate_limit(req, ctx, api::auth::register::get_google_callback, "API_RL", "api")
         )
         
-        // Confirm
+        // Auth - Confirm
 
         .get_async(
             "/api/auth/confirm",
             |req, ctx| async_rate_limit(req, ctx, api::auth::confirm::get_confirm, "API_RL", "api")
         )
 
-        // Resend
+        // Auth - Resend
 
         .post_async(
             "/api/auth/resend",
             |req, ctx| async_rate_limit(req, ctx, api::auth::resend::post_resend, "API_RL", "api")
+        )
+
+        // Auth - Unregister
+        .delete_async(
+            "/api/auth/unregister",
+            |req, ctx| async_rate_limit(req, ctx, api::auth::unregister::delete_unregister, "API_RL", "api")
+        )
+
+        // Auth - Login
+        .post_async(
+            "/api/auth/login",
+            |req, ctx| async_rate_limit(req, ctx, api::auth::login::post_login, "API_RL", "api")
+        )
+
+        // Auth - Refresh session
+        .post_async(
+            "/api/auth/refresh",
+            |req, ctx| async_rate_limit(req, ctx, api::auth::refresh::post_refresh, "API_RL", "api")
+        )
+
+        // Auth - Logout
+        .post_async(
+            "/api/auth/logout",
+            |req, ctx| async_rate_limit(req, ctx, api::auth::logout::post_logout, "API_RL", "api")
+        )
+
+        // Users - Userid/me
+        .get_async(
+            "/api/users/:user_id",
+            |req, ctx| async_rate_limit(req, ctx, api::users::get, "API_RL", "api")
+        )
+
+        .get_async(
+            "/api/users/me",
+            |req, ctx| async_rate_limit(req, ctx, api::users::me::get, "API_RL", "api")
         )
 
         // Bricks - Meta (GET/POST)
@@ -89,34 +124,15 @@ async fn fetch(req: Request, env: Env, _ctx: Context) -> Result<Response> {
             |req, ctx| async_rate_limit(req, ctx, api::bricks::code::post, "API_RL", "api")
         )
 
-        // Unregister
-        .delete_async(
-            "/api/auth/unregister",
-            |req, ctx| async_rate_limit(req, ctx, api::auth::unregister::delete_unregister, "API_RL", "api")
-        )
-
-        // Login
-        .post_async(
-            "/api/auth/login",
-            |req, ctx| async_rate_limit(req, ctx, api::auth::login::post_login, "API_RL", "api")
-        )
-
-        // Refresh session
-        .post_async(
-            "/api/auth/refresh",
-            |req, ctx| async_rate_limit(req, ctx, api::auth::refresh::post_refresh, "API_RL", "api")
-        )
-
-        // Logout
-        .post_async(
-            "/api/auth/logout",
-            |req, ctx| async_rate_limit(req, ctx, api::auth::logout::post_logout, "API_RL", "api")
-        )
-
-        // Download
+        // Download - Latest/Version
         .get_async(
             "/api/download/latest",
             |req, ctx| async_rate_limit(req, ctx, api::download::latest::get, "API_RL", "api")
+        )
+
+        .get_async(
+            "/api/download/:version",
+            |req, ctx| async_rate_limit(req, ctx, api::download::version::get, "API_RL", "api")
         )
         
         // fallback per path esistenti ma metodo sbagliato → 405

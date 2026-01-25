@@ -1,5 +1,4 @@
 use std::collections::HashMap;
-use reqwest::Client;
 use serde::Deserialize;
 use serde_json::Value;
 use worker::*;

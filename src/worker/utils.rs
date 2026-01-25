@@ -34,7 +34,7 @@ where
 pub async fn redirect_to_error(req: Request, _ctx: RouteContext<()>, status_code: u16) -> Result<Response> {
     let wants_json = req
         .headers()
-        .get("content-type")
+        .get("accept")
         .map_or(false, |ct| {
             if let Some(ct) = ct {
                 return ct.to_lowercase().contains("application/json");

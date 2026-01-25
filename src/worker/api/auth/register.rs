@@ -1,12 +1,14 @@
 use resend_rs::{Resend, types::{CreateEmailBaseOptions, EmailTemplate}};
+use std::{collections::HashMap, str::FromStr as _};
 use serde::{Deserialize, Serialize};
+use sha2::{Sha256, Digest};
 use serde_json::Value;
 use urlencoding::encode;
-use std::{collections::HashMap, str::FromStr as _};
 use reqwest::Client;
 use worker::*;
 
-use crate::{CLIENT, api::{auth::{EmailData, User}, users}, errors::json_error};
+
+use crate::{CLIENT, api::{auth::{EmailData, UserIdentity}, users}, errors::{ApiError, json_error}};
 
 #[derive(Deserialize, Serialize)]
 struct ClassicRegisterRequest {
@@ -19,9 +21,30 @@ struct ClassicRegisterRequest {
     extra: HashMap<String, Value>,
 }
 
+pub fn generate_username(identifier: &str, is_email: bool) -> String {
+    let id_trimmed = identifier.trim();
+
+    // Calcola hash SHA-256
+    let mut hasher = Sha256::new();
+    hasher.update(id_trimmed.as_bytes());
+    let result = hasher.finalize();
+    let hash_str = hex::encode(result);
+    let short_hash = &hash_str[..8]; // primi 8 caratteri
+
+    if is_email {
+        // Prendi la parte prima della chiocciola
+        let local_part = id_trimmed.split('@').next().unwrap_or("user");
+        // Username: localpart o localpart_{hash} per sicurezza/unicità
+        format!("{}_{}", local_part, short_hash)
+    } else {
+        // Registrazione con telefono
+        format!("user_{}", short_hash)
+    }
+}
+
 pub async fn post_classic(mut req: Request, ctx: RouteContext<()>) -> Result<Response> {
     let body: ClassicRegisterRequest = req.json().await?;
-    let user_agent = req.headers().get("user-agent").unwrap_or_default();
+    let origin = req.url()?.origin().unicode_serialization();
 
     // variabili d'ambiente
     let supabase_url = ctx.env.var("SUPABASE_URL")?;
@@ -29,47 +52,49 @@ pub async fn post_classic(mut req: Request, ctx: RouteContext<()>) -> Result<Res
     let resend_key = ctx.env.var("RESEND_KEY")?;
     //let supabase_anon_key = ctx.env.var("SUPABASE_ANON_KEY")?;
 
+    let username = if let Some(email) = &body.email {
+        generate_username(email, true)
+    }
+    else if let Some(phone) = &body.phone {
+        generate_username(phone, false)
+    }
+    else {
+        return json_error(400, "missing_fields", "Email or phone required");
+    };
+
     // user_metadata
     let mut user_metadata = serde_json::Map::new();
+    user_metadata.insert("username".into(),Value::String(username.clone()));
+    user_metadata.insert("display_name".into(),Value::String(username));
     for (k, v) in body.extra.into_iter() {
         user_metadata.insert(k, v);
     }
-
-    // redirect_url based on the user_agent
-    let redirect_to = if let Some(ua) = user_agent.as_ref() {
-        if ua.starts_with("BrickUIApp") {
-            "http://localhost:5173/auth/confirmed"
-        } else {
-            "https://brickui.app"
-        }
-    } else {
-        "https://brickui.app"
-    };
-
-    console_log!("{redirect_to}");
 
     // payload base per signup
     let mut payload = serde_json::json!({
         "type": "signup",
         "password": body.password,
         "data": user_metadata,
-        "redirect_to": redirect_to
+        "redirect_to": format!("{origin}/auth/confirmed")
     });
 
     // check email/phone
-    let users_json = CLIENT
+    let users_json: Value = CLIENT
         .get(format!("{}/auth/v1/admin/users", supabase_url))
         .header("apikey", supabase_key.to_string())
         .header("Authorization", format!("Bearer {}", supabase_key))
         .send()
         .await
         .map_err(|e| format!("Error querying users: {}", e))?
-        .text()
+        .json()
         .await
         .map_err(|e| format!("Error obtaining text response: {e}"))?;
 
-    let users_map: Value = serde_json::from_str(&users_json)?;
-    let users = users_map["users"].as_array().ok_or("Unexpected response format")?;
+    if let Some(err) = ApiError::try_from_value(&users_json) {
+        return err.into_response();
+    }
+
+    let users = users_json["users"].as_array().ok_or("Unexpected response format")?;
 
     // filtro lato Rust
     if let Some(email) = body.email.as_ref() {
@@ -89,7 +114,7 @@ pub async fn post_classic(mut req: Request, ctx: RouteContext<()>) -> Result<Res
     }
 
     // signup vero e proprio
-    let response = CLIENT
+    let response: Value = CLIENT
         .post(format!("{}/auth/v1/admin/generate_link", supabase_url))
         .header("apikey", supabase_key.to_string())
         .header("Authorization", format!("Bearer {}", supabase_key))
@@ -97,18 +122,19 @@ pub async fn post_classic(mut req: Request, ctx: RouteContext<()>) -> Result<Res
         .body(payload.to_string())
         .send()
         .await
-        .map_err(|e| format!("Error sending request: {e}"))?;
-
-    let status_code = response.status().as_u16();
-    let response_body = response
-        .text()
+        .map_err(|e| format!("Error sending request: {e}"))?
+        .json()
         .await
         .map_err(|e| format!("Error obtaining response body: {e}"))?;
 
-    let email_data: EmailData = serde_json::from_str(&response_body)
+    if let Some(err) = ApiError::try_from_value(&users_json) {
+        return err.into_response();
+    }
+
+    let email_data: EmailData = serde_json::from_value(response.clone())
         .map_err(|e| format!("Error deserializing json: {e}"))?;
 
-    let user_data: User = serde_json::from_str(&response_body)
+    let user_data: UserIdentity = serde_json::from_value(response)
         .map_err(|e| format!("Error deserializing json: {e}"))?;
 
     if let Some(email_address) = &user_data.email {
@@ -135,8 +161,7 @@ pub async fn post_classic(mut req: Request, ctx: RouteContext<()>) -> Result<Res
     }
 
     Ok(Response::from_body(ResponseBody::Body(serde_json::to_vec(&user_data)?))
-        .map_err(|e| format!("Error creating response: {e}"))?
-        .with_status(status_code))
+        .map_err(|e| format!("Error creating response: {e}"))?)
 
 }
 

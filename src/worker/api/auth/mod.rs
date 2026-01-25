@@ -24,7 +24,7 @@ where
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
-pub struct User {
+pub struct UserIdentity {
     pub app_metadata: HashMap<String, Value>,
     pub aud: String,
     pub confirmation_sent_at: Option<String>,
