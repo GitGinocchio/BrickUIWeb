@@ -13,9 +13,9 @@ const svgContent = ref(svgContentRaw);
 
 <style scoped>
 .svg-wrapper {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 700px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 700px;
 }
 </style>

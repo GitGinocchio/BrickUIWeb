@@ -15,13 +15,6 @@
         <a href="/" class="button secondary">Continua sul web</a>
       </div>
     </NCard>
-  
-    <FlickeringBackground 
-      :color="colors.dark.accentForeground" 
-      :square-size="15"
-      :flicker-chance="0.25"
-      :max-opacity="0.2"
-    />
   </div>
 </template>
 
@@ -44,7 +37,7 @@ function detectDesktop() {
 }
 
 function openApp() {
-  window.location.href = "brickui://";
+  window.location.href = `brickui://auth/confirmed/${window.location.hash}`;
 }
 
 onMounted(() => {
@@ -72,18 +65,5 @@ onMounted(() => {
 .card {
   max-width: 30rem;
   width: 100%;
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  .container {
-    padding: 1rem;
-    margin-top: 4rem;
-    min-height: calc(100vh - 4rem);
-  }
-  
-  .card {
-    max-width: 100%;
-  }
 }
 </style>

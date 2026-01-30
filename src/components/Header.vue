@@ -6,29 +6,22 @@
         <img src="../assets/logo.svg" alt="Logo" />
         <div>
           <h2>BrickUI</h2>
-          <p>Desktop Customization</p>
+          <p class="short-description">Desktop Customization</p>
         </div>
       </div>
 
       <!-- Nav desktop -->
       <nav class="nav-desktop">
-          <RouterLink to="/" custom v-slot="{navigate, isActive}">
-              <NButton @click="navigate" :class="{'is-active': isActive}" quaternary medium>Home</NButton>
-          </RouterLink>
-          <RouterLink to="/about" custom v-slot="{navigate, isActive}">
-              <NButton @click="navigate" :class="{'is-active': isActive}" quaternary medium>About</NButton>
-          </RouterLink>
-          <RouterLink to="/contact" custom v-slot="{navigate, isActive}">
-              <NButton @click="navigate" :class="{'is-active': isActive}" quaternary medium>Contatti</NButton>
-          </RouterLink>
+        <RouterLink to="/" custom v-slot="{navigate, isActive}">
+            <NButton @click="navigate" :class="{'is-active': isActive}" quaternary medium>Home</NButton>
+        </RouterLink>
+        <RouterLink to="/about" custom v-slot="{navigate, isActive}">
+            <NButton @click="navigate" :class="{'is-active': isActive}" quaternary medium>About</NButton>
+        </RouterLink>
+        <RouterLink to="/contact" custom v-slot="{navigate, isActive}">
+            <NButton @click="navigate" :class="{'is-active': isActive}" quaternary medium>Contatti</NButton>
+        </RouterLink>
       </nav>
-
-      <!-- Burger mobile -->
-      <div class="burger" @click="drawerVisible = !drawerVisible">
-        <span :class="{ open: drawerVisible }"></span>
-        <span :class="{ open: drawerVisible }"></span>
-        <span :class="{ open: drawerVisible }"></span>
-      </div>
 
       <!-- Download button -->
       <div class="download-btn">
@@ -39,27 +32,52 @@
           Download
         </NButton>
       </div>
+
+      <div class="burger-menu-btn">
+        <NButton secondary medium @click="drawerVisible = !drawerVisible">
+            <template #icon>
+                <MenuIcon :style="{ color: 'white' }" />
+            </template>
+            Menu
+        </NButton>
+      </div>
     </div>
 
     <!-- Drawer mobile -->
-    <div class="nav-mobile" v-show="drawerVisible">
-      <RouterLink to="/" custom v-slot="{navigate, isActive}">
-           <NButton @click="navigate; drawerVisible=false" :class="{'is-active': isActive}" quaternary block>Home</NButton>
-      </RouterLink>
-      <RouterLink to="/about" custom v-slot="{navigate, isActive}">
-           <NButton @click="navigate; drawerVisible=false" :class="{'is-active': isActive}" quaternary block>About</NButton>
-      </RouterLink>
-      <RouterLink to="/contact" custom v-slot="{navigate, isActive}">
-           <NButton @click="navigate; drawerVisible=false" :class="{'is-active': isActive}" quaternary block>Contatti</NButton>
-      </RouterLink>
-    </div>
+    <Teleport to="body">
+        <div class="nav-mobile" v-show="drawerVisible" :style="{ backgroundColor: backgroundColor }">
+            <RouterLink to="/" custom v-slot="{navigate, isActive}">
+                <NButton @click="(e) => { navigate(e); drawerVisible=false }" :class="{'is-active': isActive}" quaternary block>
+                    Home
+                </NButton>
+            </RouterLink>
+            <RouterLink to="/about" custom v-slot="{navigate, isActive}">
+                <NButton @click="(e) => { navigate(e); drawerVisible=false }" :class="{'is-active': isActive}" quaternary block>
+                    About
+                </NButton>
+            </RouterLink>
+            <RouterLink to="/contact" custom v-slot="{navigate, isActive}">
+                <NButton @click="(e) => { navigate(e); drawerVisible=false }" :class="{'is-active': isActive}" quaternary block>
+                    Contatti
+                </NButton>
+            </RouterLink>
+            <RouterLink to="/download" custom v-slot="{navigate, isActive}">
+                <NButton @click="(e) => { navigate(e); drawerVisible=false; redirectToDownload() }" :class="{'is-active': isActive}" primary block>
+                    <template #icon>
+                        <DownloadIcon />
+                    </template>
+                    Download
+                </NButton>
+            </RouterLink>
+        </div>
+    </Teleport>
   </header>
 </template>
 
 <script setup lang="ts">
 import { computed, ref, onMounted, onUnmounted } from "vue";
 import { NButton } from "naive-ui";
-import { Download as DownloadIcon } from "lucide-vue-next";
+import { Download as DownloadIcon, Menu as MenuIcon } from "lucide-vue-next";
 import { RouterLink } from "vue-router";
 
 function redirectToDownload() {
@@ -155,52 +173,53 @@ header div, nav {
     background-color: #a0323f;
 }
 
-/* BURGER MOBILE */
-.burger {
+.burger-menu-btn {
     display: none;
-    flex-direction: column;
-    gap: 5px;
-    cursor: pointer;
-}
-.burger span {
-    width: 25px;
-    height: 3px;
-    background: white;
-    display: block;
-    transition: 0.3s;
-}
-.burger span.open:nth-child(1) {
-    transform: rotate(45deg) translate(5px, 5px);
-}
-.burger span.open:nth-child(2) {
-    opacity: 0;
-}
-.burger span.open:nth-child(3) {
-    transform: rotate(-45deg) translate(5px, -5px);
 }
 
 /* Drawer mobile */
 .nav-mobile {
     display: none;
     flex-direction: column;
-    position: absolute;
+    position: fixed;
+    margin-top: 0.5rem;
+    margin-right: 1rem;
     top: 64px;
     right: 0;
     width: 200px;
-    background: rgba(0,0,0,0.95);
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-radius: 1rem;
     padding: 1rem;
     gap: 0.5rem;
     z-index: 1001;
+    overflow: visible;
 }
 
-/* MEDIA QUERY */
-@media (max-width: 768px) {
-    .nav-wrapper.nav-desktop {
+@media (max-width: 1400px) {
+    .container {
+        margin-left: 2rem;
+        margin-right: 2rem;
+    }
+
+    .nav-desktop {
         display: none;
     }
-    .burger {
+
+    .short-description {
+        display: none;
+    }
+
+    .download-btn {
+        display: none;
+    }
+
+    .burger-menu-btn {
         display: flex;
     }
+
     .nav-mobile {
         display: flex;
     }

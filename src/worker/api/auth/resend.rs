@@ -15,6 +15,7 @@ pub struct ResendRequest {
     pub redirect_to: Option<String>,
 }
 
+// TODO: sostituire il resend con quello custom utilizzando resend
 pub async fn post_resend(mut req: Request, ctx: RouteContext<()>) -> Result<Response> {
     let body: ResendRequest = req.json().await?;
 

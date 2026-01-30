@@ -3,7 +3,8 @@
       <div class="layout">
         <Header />
         <main class="content">
-          <RouterView />
+          <NSpin v-if="isLoading" size="large" class="page-loading" />
+          <RouterView v-else />
         </main>
         <Footer />
       </div>
@@ -11,12 +12,26 @@
 </template>
 
 <script setup lang="ts">
-import { RouterLink, RouterView } from "vue-router";
+import { RouterLink, RouterView, useRouter } from "vue-router";
 import Header from "@/components/Header.vue";
 import Footer from "./components/Footer.vue";
-import { NConfigProvider } from "naive-ui"
+import { NConfigProvider, NSpin } from "naive-ui"
 import { dark as darkTheme } from "./themes/dark"
 import { ref } from "vue";
+
+const isLoading = ref(false);
+const router = useRouter();
+
+router.beforeEach((to, from, next) => {
+  isLoading.value = true;
+  next();
+});
+
+router.afterEach(() => {
+  setTimeout(() => {
+    isLoading.value = false;
+  }, 5);
+});
 </script>
 
 <style scoped>
@@ -29,16 +44,29 @@ import { ref } from "vue";
 .layout {
   display: flex;
   flex-direction: column;
-  height: 100vh; /* altezza totale della finestra */
+  min-height: 100vh; /* altezza totale della finestra */
 }
 
 .content {
   flex: 1;  /* OCCUPA tutto lo spazio rimanente */
+  padding-top: 64px;
   display: flex;
+  min-height: 0;
   flex-direction: column;
 }
 
-body {
-  font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+.page-loading {
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
 }
+
+@media (max-width: 1000px) {
+  .content {
+    padding-top: 0;
+  }
+}
+
 </style>

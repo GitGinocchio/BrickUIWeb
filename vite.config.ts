@@ -34,6 +34,9 @@ function rustWatcher() {
 
 // https://vite.dev/config/
 export default defineConfig({
+  server: {
+    host: true
+  },
 	plugins: [
 		vue(),
 		vueDevTools(),

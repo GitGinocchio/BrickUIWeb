@@ -46,6 +46,8 @@ pub async fn post_classic(mut req: Request, ctx: RouteContext<()>) -> Result<Res
     let body: ClassicRegisterRequest = req.json().await?;
     let origin = req.url()?.origin().unicode_serialization();
 
+    console_log!("origin: {origin}");
+
     // variabili d'ambiente
     let supabase_url = ctx.env.var("SUPABASE_URL")?;
     let supabase_key = ctx.env.var("SUPABASE_KEY")?;
@@ -131,6 +133,8 @@ pub async fn post_classic(mut req: Request, ctx: RouteContext<()>) -> Result<Res
         return err.into_response();
     }
 
+    console_log!("response: {response:#?}");
+
     let email_data: EmailData = serde_json::from_value(response.clone())
         .map_err(|e| format!("Error deserializing json: {e}"))?;
 
@@ -144,7 +148,12 @@ pub async fn post_classic(mut req: Request, ctx: RouteContext<()>) -> Result<Res
         variables.insert("USER_NAME".into(), Value::String(email_address.clone()));
         variables.insert(
             "VERIFY_URL".into(), 
-            Value::String(format!("{}/api/auth/confirm?token={}&redirect_to={}", email_data.redirect_to, email_data.hashed_token, "https://brickui.app/auth/confirmed"))
+            Value::String(format!(
+                "{}/api/auth/confirm?token={}&redirect_to={}", 
+                origin,
+                email_data.hashed_token, 
+                format!("{origin}/auth/confirmed")
+            ))
         );
 
         let template = EmailTemplate::new("confirm-registration").with_variables(variables);

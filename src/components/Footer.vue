@@ -143,6 +143,35 @@ a:hover {
     width: 40px;
     height: 40px;
 }
+
+@media (max-width: 1000px) {
+    .container {
+        padding-left: 4rem;
+        padding-right: 4rem;
+    }
+
+    .grid {
+        display: flex;
+        flex-direction: column;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+        font-size: 1.1em; /* aumenta i titoli proporzionalmente */
+    }
+
+    .logo span {
+        font-size: 20px; /* aumenta il testo del logo */
+    }
+
+    li, p, a {
+        font-size: 1.1rem; /* aumenta un po' i testi generici */
+    }
+
+    .copyright p {
+        font-size: 0.7rem;
+    }
+    
+}
 </style>
 
 <script setup lang="ts">

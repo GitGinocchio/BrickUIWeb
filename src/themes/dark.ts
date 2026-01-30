@@ -1,6 +1,6 @@
 // darkTheme.ts
 import { type GlobalThemeOverrides } from "naive-ui"
-import { colors } from "./colors" // Assumendo che colors.ts sia nella stessa cartella
+import { colors } from "./colors"
 
 export const dark: GlobalThemeOverrides = {
   common: {
@@ -12,31 +12,31 @@ export const dark: GlobalThemeOverrides = {
   },
 
   Button: {
+    // === PRIMARY ===
+    textColor: colors.dark.primaryForeground,
+
     // === SECONDARY ===
     colorSecondary: colors.dark.primaryDark,
     colorSecondaryHover: colors.dark.primary,
-    paddingMedium: "0.5rem 1rem 0.5rem 1rem",
-    paddingLarge: "0.5rem 1.75rem 0.5rem 1.75rem",
+    colorSecondaryPressed: colors.dark.primaryGlow,
+    paddingMedium: "0.5rem 1rem",
+    paddingLarge: "0.5rem 1.75rem",
     borderRadiusMedium: "10px",
     borderRadiusLarge: "10px",
     heightMedium: "2.5rem",
     heightLarge: "3rem",
     fontWeight: "500",
 
-    // === Tertiary ===
-    colorTertiary: colors.light.background,
-    textColorTertiary: colors.light.tertiary,
-    colorTertiaryHover: colors.light.tertiaryForeground,
-    colorTertiaryPressed: colors.light.tertiaryPressed,
-  
+    // === TERTIARY ===
+    colorTertiary: colors.dark.card,
+    textColorTertiary: colors.dark.cardForeground,
+    colorTertiaryHover: colors.dark.secondary,
+    colorTertiaryPressed: colors.dark.muted,
 
-    // === Quaternary ===
+    // === QUATERNARY ===
+    colorQuaternary: colors.dark.background,
     colorQuaternaryHover: colors.dark.primaryDark,
     colorQuaternaryPressed: colors.dark.primary,
-    color: colors.dark.foreground,
-    
-
-    // === Default ===
-    textColor: colors.dark.foreground,
+    textColorQuaternary: colors.dark.foreground
   }
 }

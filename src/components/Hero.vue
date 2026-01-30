@@ -31,7 +31,6 @@
 </template>
 
 <style scoped>
-
 section {
     padding-top: 8rem;
     padding-bottom: 10rem;
@@ -40,7 +39,7 @@ section {
     display: flex;
 }
 
-.main-container{
+.main-container {
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -52,12 +51,12 @@ section {
 }
 
 
-span{
+span {
     display: block;
     color: #cb4153;
 }
 
-h1{
+h1 {
     color: white;
     line-height: 1;
     font-size: 4.5rem;
@@ -76,32 +75,51 @@ h1{
     gap: 1rem;
 }
 
-.download-nbutton{
-    --n-color-pressed: #7b2832 !important;
+@media (max-width: 1400px) {
+    li, p, a {
+        font-size: 1.3rem;
+    }
+
+    .main-container {
+        margin-bottom: 8rem;
+        flex-direction: column-reverse;
+    }
 }
 
-.github-nbutton{
-    --n-color-focus: #fff !important;
+@media (max-width: 1000px) {
+    h1 {
+        font-size: 2.5rem;
+    }
+
+    .slogan .slogan-description p {
+        font-size: 1rem;
+    }
+
+    section {
+        padding-top: 0;
+        padding-bottom: 0;
+    }
+
+    .buttons {
+        flex-direction: column;
+    }
+
+    .main-container {
+        margin-left: 2rem;
+        margin-right: 2rem;
+    }
+
+    :deep(svg.building-svg) {
+        align-self: center;
+        width: 100%;
+        height: auto;
+        max-width: 800px;
+    }
+    
+    :deep(.svg-wrapper) {
+        width: 100%;
+    }
 }
-
-.github-nbutton:deep(.n-button__content),
-.github-nbutton:deep(.n-button__icon) {
-    color: #1a1a1a;
-    transition: color 0.3s ease;
-}
-
-.github-nbutton:hover:deep(.n-button__content),
-.github-nbutton:hover:deep(.n-button__icon) {
-    color: #ffffff;
-}
-
-.github-nbutton:hover:active:deep(.n-button__content),
-.github-nbutton:hover:active:deep(.n-button__icon) {
-    color: #fff;
-}
-
-
-
 </style>
 
 <script setup lang="ts">
