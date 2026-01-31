@@ -1,10 +1,10 @@
 <template>
   <div class="container">
     <FlickeringBackground 
-        :color="colors.dark.accentForeground" 
-        :square-size="15"
-        :flicker-chance="0.5"
-        :max-opacity="0.15"
+      :color="colors.dark.accentForeground" 
+      :square-size="15"
+      :flicker-chance="0.5"
+      :max-opacity="0.15"
     />
     <NResult
       :status="(icon as any)"
