@@ -1,10 +1,11 @@
+name: Sync
 on:
   push:
     branches:
       - main
 
 jobs:
-  sync-dev:
+  sync:
     runs-on: ubuntu-latest
     permissions:
       contents: write
