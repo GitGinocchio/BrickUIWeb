@@ -6,6 +6,8 @@ on:
 jobs:
   sync-dev:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v5
       - run: |
