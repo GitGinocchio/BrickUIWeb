@@ -15,6 +15,12 @@
         <a href="/" class="button secondary">Continua sul web</a>
       </div>
     </NCard>
+    <FlickeringBackground 
+      :color="colors.dark.accentForeground" 
+      :square-size="15"
+      :flicker-chance="0.5"
+      :max-opacity="0.15"
+    />
   </div>
 </template>
 

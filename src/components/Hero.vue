@@ -32,7 +32,7 @@
 
 <style scoped>
 section {
-    padding-top: 8rem;
+    padding-top: 4rem;
     padding-bottom: 10rem;
     align-self: center;
     width: 100%;

@@ -63,7 +63,7 @@ router.afterEach(() => {
   height: 100vh;
 }
 
-@media (max-width: 1000px) {
+@media (max-width: 1400px) {
   .content {
     padding-top: 0;
   }

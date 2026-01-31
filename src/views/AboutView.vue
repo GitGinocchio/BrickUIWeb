@@ -279,6 +279,7 @@
 <script setup lang="ts">
     import Animatedcontent from "@/components/Animatedcontent.vue";
     import Fadecontent from "@/components/Fadecontent.vue";
+    import { colors } from "@/themes/colors";
     import { onMounted, ref } from "vue";
 
     const timeline = ref([

@@ -6,6 +6,8 @@
 
 html {
   scrollbar-gutter: stable;
+  scroll-behavior: smooth;
+  scroll-snap-type: y mandatory;
 }
 
 body {
@@ -25,6 +27,12 @@ body {
 #app {
   display:flex;
   flex-direction: column;
+}
+
+
+.snap-section {
+  scroll-snap-align: start;
+  min-height: 100vh;
 }
 
 /*

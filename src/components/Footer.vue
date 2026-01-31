@@ -58,8 +58,8 @@
 
 .container {
     border-top: 1px solid rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(8px); /* sfocatura del background */
-    -webkit-backdrop-filter: blur(8px); /* compatibilità Safari */
+    backdrop-filter: blur(6px); /* sfocatura del background */
+    -webkit-backdrop-filter: blur(6px); /* compatibilità Safari */
     background: rgba(255, 255, 255, 0.05); /* trasparente leggermente bianco */
     padding-top: 3rem;
     padding-bottom: 3rem;
