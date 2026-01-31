@@ -28,7 +28,7 @@ pub async fn get(req: Request, ctx: RouteContext<()>) -> Result<Response> {
         return err.into_response();
     }
 
-    let identity: UserIdentity= serde_json::from_value(response)
+    let identity: UserIdentity = serde_json::from_value(response)
         .map_err(|e| format!("Error deserializing autority: {e}"))?;
 
     let response: Value = CLIENT
