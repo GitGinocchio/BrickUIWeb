@@ -8,7 +8,7 @@ use reqwest::Client;
 use worker::*;
 
 
-use crate::{CLIENT, api::{auth::{EmailData, UserIdentity}, users}, errors::{ApiError, json_error}};
+use crate::{CLIENT, api::{auth::{EmailData, UserIdentity, utils::send_confirmation_email}, users}, errors::{ApiError, json_error}};
 
 #[derive(Deserialize, Serialize)]
 struct ClassicRegisterRequest {
@@ -129,11 +129,9 @@ pub async fn post_classic(mut req: Request, ctx: RouteContext<()>) -> Result<Res
         .await
         .map_err(|e| format!("Error obtaining response body: {e}"))?;
 
-    if let Some(err) = ApiError::try_from_value(&users_json) {
+    if let Some(err) = ApiError::try_from_value(&response) {
         return err.into_response();
     }
-
-    console_log!("response: {response:#?}");
 
     let email_data: EmailData = serde_json::from_value(response.clone())
         .map_err(|e| format!("Error deserializing json: {e}"))?;
@@ -142,36 +140,16 @@ pub async fn post_classic(mut req: Request, ctx: RouteContext<()>) -> Result<Res
         .map_err(|e| format!("Error deserializing json: {e}"))?;
 
     if let Some(email_address) = &user_data.email {
-        let resend = Resend::new(&resend_key.to_string());
-
-        let mut variables = HashMap::<String, Value>::new();
-        variables.insert("USER_NAME".into(), Value::String(email_address.clone()));
-        variables.insert(
-            "VERIFY_URL".into(), 
-            Value::String(format!(
-                "{}/api/auth/confirm?token={}&redirect_to={}", 
-                origin,
-                email_data.hashed_token, 
-                format!("{origin}/auth/confirmed")
-            ))
-        );
-
-        let template = EmailTemplate::new("confirm-registration").with_variables(variables);
-        let opts = CreateEmailBaseOptions::new(
-            "BrickUI <brickui@mail.brickui.app>", 
-            vec![email_address], 
-            "Almost done! Confirm your BrickUI account"
-        ).with_template(template);
-
-        let _email = resend.emails
-            .send(opts)
-            .await
-            .map_err(|e| format!("Error sending email: {e}"))?;
+        let _email = send_confirmation_email(
+            &resend_key.to_string(),
+            origin, 
+            email_address, 
+            email_data.hashed_token
+        ).await?;
     }
 
     Ok(Response::from_body(ResponseBody::Body(serde_json::to_vec(&user_data)?))
         .map_err(|e| format!("Error creating response: {e}"))?)
-
 }
 
 pub async fn get_google_start(mut _req: Request, ctx: RouteContext<()>) -> Result<Response> {
