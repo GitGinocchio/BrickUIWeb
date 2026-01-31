@@ -4,6 +4,21 @@
   box-sizing: border-box;
 }
 
+html {
+  scrollbar-gutter: stable;
+  scroll-behavior: smooth;
+  scroll-snap-type: y mandatory;
+}
+
+body {
+  font-family: ui-sans-serif, system-ui, sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji",
+    "Segoe UI Symbol", "Noto Color Emoji";
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
 body {
   background-color: black;
   overflow-x: hidden;
@@ -14,7 +29,15 @@ body {
   flex-direction: column;
 }
 
+
+.snap-section {
+  scroll-snap-align: start;
+  min-height: 100vh;
+}
+
+/*
 .n-config-provider {
   display: flex;
   flex-direction: column;
 }
+*/

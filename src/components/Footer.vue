@@ -58,8 +58,8 @@
 
 .container {
     border-top: 1px solid rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(8px); /* sfocatura del background */
-    -webkit-backdrop-filter: blur(8px); /* compatibilità Safari */
+    backdrop-filter: blur(6px); /* sfocatura del background */
+    -webkit-backdrop-filter: blur(6px); /* compatibilità Safari */
     background: rgba(255, 255, 255, 0.05); /* trasparente leggermente bianco */
     padding-top: 3rem;
     padding-bottom: 3rem;
@@ -142,6 +142,35 @@ a:hover {
 .link-buttons button {
     width: 40px;
     height: 40px;
+}
+
+@media (max-width: 1000px) {
+    .container {
+        padding-left: 4rem;
+        padding-right: 4rem;
+    }
+
+    .grid {
+        display: flex;
+        flex-direction: column;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+        font-size: 1.1em; /* aumenta i titoli proporzionalmente */
+    }
+
+    .logo span {
+        font-size: 20px; /* aumenta il testo del logo */
+    }
+
+    li, p, a {
+        font-size: 1.1rem; /* aumenta un po' i testi generici */
+    }
+
+    .copyright p {
+        font-size: 0.7rem;
+    }
+    
 }
 </style>
 

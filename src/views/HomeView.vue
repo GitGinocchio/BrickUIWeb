@@ -5,7 +5,7 @@
         <FlickeringBackground 
             :color="colors.dark.accentForeground" 
             :square-size="15"
-            :flicker-chance="0.25"
+            :flicker-chance="0.5"
             :max-opacity="0.2"
         />
     </div>

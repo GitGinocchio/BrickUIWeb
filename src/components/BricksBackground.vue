@@ -4,15 +4,13 @@
 
 
 <style scoped>
-body {
-    background-color: black;
-}
 .background {
-    width: 100%;
-    height: 100%;
-    position: absolute;
+    position: fixed; /* Fisso rispetto alla finestra, non scorre */
     top: 0;
     left: 0;
+    width: 100vw;    /* tutta la larghezza della finestra */
+    height: 100vh;   /* tutta l’altezza della finestra */
+    z-index: -1;     /* dietro tutto il contenuto */
 }
 </style>
 

@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <h2>Everything you need to <span>customize your desktop</span></h2>
-        <p>Powerful features designed to make desktop customization simple and enjoyable</p>
+        <p class="description">Powerful features designed to make desktop customization simple and enjoyable</p>
         <div class="card-container">
             <div class="card" v-for="feature in features">
                 <div class="icon">
@@ -86,7 +86,7 @@
     align-items: center;
     justify-content: center;
     width: 3rem;
-    height: 3rem;
+    aspect-ratio: 1;
 
     /* Applica transizione fluida alle trasformazioni */
     transition-property: transform;
@@ -102,6 +102,56 @@
 .container span {
     display: block;
     color: #cb4153;
+}
+
+@media (max-width: 1400px) {
+    .container {
+        margin-bottom: 5rem;
+    }
+
+    .card-container {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .card p {
+        margin-top: 0;
+    }
+
+    .icon {
+        width: 3.5rem;
+    }
+
+    .icon :deep(svg) {
+        scale: 1.25 !important;
+    }
+}
+
+@media (max-width: 1000px) {
+    .container h2 {
+        align-self: first baseline;
+        margin-left: 2rem;
+        font-size: 1.7rem;
+    }
+
+    .container .description {
+        align-self: first baseline;
+        font-size: 1rem;
+        margin-left: 2rem;
+        margin-right: 2rem;
+    }
+
+    li, p, a {
+        font-size: 5rem;
+    }
+
+    .card-container {
+        margin-left: 2rem;
+        margin-right: 2rem;
+    }
 }
 </style>
 
