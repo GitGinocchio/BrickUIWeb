@@ -1,8 +1,9 @@
 use std::collections::HashMap;
-use reqwest::Client;
 use serde::Deserialize;
 use serde_json::Value;
 use worker::*;
+
+use crate::CLIENT;
 
 #[derive(Deserialize)]
 struct ClassicLoginRequest {
@@ -30,9 +31,7 @@ pub async fn post_login(mut req: Request, ctx: RouteContext<()>) -> Result<Respo
         payload["user_metadata"][key] = value;
     }
 
-    let client = Client::new();
-
-    let response = client
+    let response = CLIENT
         .post(format!("{}/auth/v1/token?grant_type=password", supabase_url))
         .header("apikey", supabase_key.to_string())
         .header("Authorization", format!("Bearer {}", supabase_key))
