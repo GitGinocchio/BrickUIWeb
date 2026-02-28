@@ -21,7 +21,7 @@
     "vue-router": "^4.5.1"
   },
   "devDependencies": {
-    "@cloudflare/vite-plugin": "^1.15.2",
+    "@cloudflare/vite-plugin": "^1.25.6",
     "@tsconfig/node22": "^22.0.5",
     "@types/node": "^24.10.1",
     "@vitejs/plugin-vue": "^6.0.2",
@@ -32,6 +32,6 @@
     "vite": "^7.2.4",
     "vite-plugin-vue-devtools": "^8.0.5",
     "vue-tsc": "^3.1.5",
-    "wrangler": "^4.50.0"
+    "wrangler": "^4.69.0"
   }
 }
