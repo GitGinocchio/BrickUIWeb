@@ -9,7 +9,7 @@ workers_dev = true
 preview_urls = true
 
 routes = [
-  { pattern = "brickui.app", custom_domain = true }
+  { pattern = "brickui.giuliotognetto.dev", custom_domain = true }
 ]
 
 [build]
@@ -24,7 +24,19 @@ binding = "ASSETS"
 run_worker_first = [ "/api/*" ]
 
 [observability]
+enabled = false
+head_sampling_rate = 1
+
+[observability.logs]
 enabled = true
+head_sampling_rate = 1
+persist = true
+invocation_logs = true
+
+[observability.traces]
+enabled = true
+persist = true
+head_sampling_rate = 1
 
 [placement]
 mode = "smart"
